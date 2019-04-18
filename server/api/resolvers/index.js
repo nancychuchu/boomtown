@@ -1,3 +1,5 @@
+//jshint esversion:6
+
 /**
  *  @TODO: Handling Server Errors
  *
@@ -7,7 +9,7 @@
  *  Throwing ApolloErrors from your resolvers is a nice pattern to follow and
  *  will help you easily debug problems in your resolving functions.
  *
- *  It will also help you control th error output of your resource methods and use error
+ *  It will also help you control the error output of your resource methods and use error
  *  messages on the client! (More on that later).
  *
  *  The user resolver has been completed as an example of what you'll need to do.
@@ -23,7 +25,7 @@ const { DateScalar } = require('../custom-types');
 
 module.exports = app => {
   return {
-    Date: DateScalar,
+    // Date: DateScalar,
 
     Query: {
       viewer() {
@@ -44,22 +46,36 @@ module.exports = app => {
         return null;
       },
       async user(parent, { id }, { pgResource }, info) {
+        console.log(id);
         try {
           const user = await pgResource.getUserById(id);
+        
+          if (user == null) {
+            throw 'User was not found.';
+          }
           return user;
         } catch (e) {
           throw new ApolloError(e);
         }
       },
-      async items() {
-        // @TODO: Replace this mock return statement with the correct items from Postgres
-        return [];
-        // -------------------------------
+
+      async items(parent, { filter }, { pgResource }, info) {
+        try{ 
+          const items = await pgResource.getItems(filter); 
+          return items;
+        } catch (e) {
+          throw new ApolloError(e);
+        }
       },
-      async tags() {
-        // @TODO: Replace this mock return statement with the correct tags from Postgres
-        return [];
-        // -------------------------------
+
+      async tags(parent, args, {pgResource} ) {
+        try{
+          const tags = await pgResource.getTags();
+          return tags;
+        }catch(e){
+          throw new ApolloError(e);
+        }
+        
       }
     },
 
