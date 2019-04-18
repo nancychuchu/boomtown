@@ -91,11 +91,15 @@ module.exports = app => {
        *
        */
       // @TODO: Uncomment these lines after you define the User type with these fields
-      // items() {
-      //   // @TODO: Replace this mock return statement with the correct items from Postgres
-      //   return []
-      //   // -------------------------------
-      // },
+      items(parent, {id}, {pgResource}) {
+        // @TODO: Replace this mock return statement with the correct items from Postgres
+        
+        console.log(id);
+        return pgResource.getItemsForUser(id);
+
+        
+        // -------------------------------
+      },
       // borrowed() {
       //   // @TODO: Replace this mock return statement with the correct items from Postgres
       //   return []
