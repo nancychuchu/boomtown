@@ -1,3 +1,5 @@
+//jshint esversion: 6
+
 const { gql } = require('apollo-server-express');
 
 /**
@@ -10,46 +12,71 @@ const { gql } = require('apollo-server-express');
  *
  * We will create the custom Date scalar together.
  */
+
+
+ 
 module.exports = gql`
 
-  scalar Date
 
-  type Item {
-    _: Boolean
-  }
+type Item {
+  id: ID!
+  title: String!
+  imageurl: String
+  description: String! 
+  itemowner: User! 
+  tags:[Tag]
+  created: String 
+  borrower: User
+}
 
-  type User {
-    _: Boolean
-  }
+type User {
+  id: ID! 
+  email: String! 
+  fullname: String! 
+  bio: String
+  items: [Item]
+  borrowed: [Item]
+}
 
-  type Tag {
-    _: Boolean
-  }
+type Tag {
+  id: ID!
+  title: String! 
+}
 
-  type File {
-    _: Boolean
-  }
 
-  input AssignedTag {
-    _: Boolean
-  }
+type File {
+  id: ID!
+  filename: String!
+  mimetype: String! 
+  encoding: String! 
+  itemid: ID! 
+}
 
-  input AssignedBorrower {
-    _: Boolean
-  }
+input AssignedTag {
+  id: ID!
+  title: String!  
+}
 
-  input NewItemInput {
-    _: Boolean
-  }
+input AssignedBorrower {
+  id: ID!
+}
 
-  type Query {
-    user(id: ID!): User
-    viewer: User
-    items(filter: ID): [Item]
-    tags: [Tag]
-  }
+input NewItemInput {
+  title: String! 
+  description: String
+  tags: [AssignedTag]
+}
 
-  type Mutation {
-    addItem: Boolean
-  }
+type Query {
+  user(id: ID!): User
+  viewer: User
+  items(filter: ID): [Item]
+  tags: [Tag]
+}
+
+type Mutation {
+  addItem: Boolean
+}
+
 `;
+
