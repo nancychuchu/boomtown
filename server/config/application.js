@@ -1,8 +1,11 @@
+//jshint esversion:6
+
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const express = require('express');
 const fallback = require('express-history-api-fallback');
 const path = require('path');
+
 
 module.exports = (app) => {
   const PORT = process.env.PORT || 8080;
@@ -45,6 +48,13 @@ module.exports = (app) => {
    *  For example: app.set('PG_HOST', process.env.PG_HOST || 'localhost')
    */
 
+   //set environment variables. 
+  app.set('PORT', PORT);
+  app.set('PG_HOST', process.env.PG_HOST || 'localhost');
+  app.set('PG_USER', process.env.PG_USER || 'boomtown');
+  app.set('PG_PASSWORD', process.env.PG_PASSWORD || 'boomtown');
+  app.set('PG_DB', process.env.PG_DB || 'boomtown');
+  
   app.use(cookieParser());
 
   if (process.env.NODE_ENV === 'production') {
