@@ -15,13 +15,17 @@
  *  The user resolver has been completed as an example of what you'll need to do.
  *  Finish of the rest of the resolvers when you're ready.
  */
-const { ApolloError } = require('apollo-server-express');
+const {
+  ApolloError
+} = require('apollo-server-express');
 
 // @TODO: Uncomment these lines later when we add auth
 // const jwt = require("jsonwebtoken")
 // const authMutations = require("./auth")
 // -------------------------------
-const { DateScalar } = require('../custom-types');
+const {
+  DateScalar
+} = require('../custom-types');
 
 module.exports = app => {
   return {
@@ -45,11 +49,14 @@ module.exports = app => {
          */
         return null;
       },
-      async user(parent, { id }, { pgResource }, info) {
-        console.log(id);
+      async user(parent, {
+        id
+      }, {
+        pgResource
+      }, info) {
         try {
           const user = await pgResource.getUserById(id);
-        
+
           if (user == null) {
             throw 'User was not found.';
           }
@@ -59,47 +66,47 @@ module.exports = app => {
         }
       },
 
-      async items(parent, { filter }, { pgResource }, info) {
-        try{ 
-          const items = await pgResource.getItems(filter); 
+      async items(parent, {
+        filter
+      }, {
+        pgResource
+      }, info) {
+        try {
+          const items = await pgResource.getItems(filter);
           return items;
         } catch (e) {
           throw new ApolloError(e);
         }
       },
 
-      async tags(parent, args, {pgResource} ) {
-        try{
+      async tags(parent, args, {
+        pgResource
+      }) {
+        try {
           const tags = await pgResource.getTags();
           return tags;
-        }catch(e){
+        } catch (e) {
           throw new ApolloError(e);
         }
-        
+
       }
     },
 
     User: {
-      /**
-       *  @TODO: Advanced resolvers
-       *
-       *  The User GraphQL type has two fields that are not present in the
-       *  user table in Postgres: items and borrowed.
-       *
-       *  According to our GraphQL schema, these fields should return a list of
-       *  Items (GraphQL type) the user has lent (items) and borrowed (borrowed).
-       *
-       */
-      // @TODO: Uncomment these lines after you define the User type with these fields
-      items(parent, {id}, {pgResource}) {
-        // @TODO: Replace this mock return statement with the correct items from Postgres
-        
-        console.log(id);
-        return pgResource.getItemsForUser(id);
-
-        
-        // -------------------------------
+      async items({
+        id
+      }, args, {
+        pgResource
+      }) {
+        try {
+          const itemsByUser = await pgResource.getItemsForUser(id);
+          console.log(itemsByUser)
+        } catch (e) {
+          throw new ApolloError(e);
+        }
       },
+
+
       // borrowed() {
       //   // @TODO: Replace this mock return statement with the correct items from Postgres
       //   return []

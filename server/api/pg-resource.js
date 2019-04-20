@@ -8,19 +8,23 @@ function tagsQueryString(tags, itemid, result) {
    *  - Is this
    */
   const length = tags.length;
-  return length === 0
-    ? `${result};`
-    : tags.shift() &&
-        tagsQueryString(
-          tags,
-          itemid,
-          `${result}($${tags.length + 1}, ${itemid})${length === 1 ? '' : ','}`
-        );
+  return length === 0 ?
+    `${result};` :
+    tags.shift() &&
+    tagsQueryString(
+      tags,
+      itemid,
+      `${result}($${tags.length + 1}, ${itemid})${length === 1 ? '' : ','}`
+    );
 }
 
 module.exports = postgres => {
   return {
-    async createUser({ fullname, email, password }) {
+    async createUser({
+      fullname,
+      email,
+      password
+    }) {
       const newUserInsert = {
         text: '', // @TODO: Authentication - Server
         values: [fullname, email, password]
@@ -53,39 +57,47 @@ module.exports = postgres => {
       }
     },
     async getUserById(id) {
-
       const findUserQuery = {
         text: 'SELECT * FROM users WHERE id = $1', // @TODO: Basic queries
         values: id ? [id] : [],
       };
 
-      try{ const user = await postgres.query(findUserQuery)
+      try {
+        const user = await postgres.query(findUserQuery)
         return user.rows[0];
-      } catch (e){
+      } catch (e) {
         throw (e);
       }
-
-      // -------------------------------
     },
 
     async getItems(idToOmit) {
-      const items = await postgres.query({
+
+      const findItems = {
         text: 'SELECT * FROM items WHERE itemowner != $1',
         values: idToOmit ? [idToOmit] : []
-      });
-      return items.rows;
+      };
+
+      try {
+        const items = await postgres.query(findItems);
+        return items.rows;
+      } catch (e) {
+        throw (e);
+      }
     },
 
     async getItemsForUser(id) {
-      const items = await postgres.query({
-        /**
-         *  @TODO: Advanced queries
-         *  Get all Items. Hint: You'll need to use a LEFT INNER JOIN among others
-         */
+      const findUserItems = {
         text: `SELECT * FROM items LEFT JOIN users ON items.itemowner = users.id WHERE itemowner = $1`,
-        values: [id]
-      });
-      return items.rows;
+        values: id ? [id] : []
+
+      };
+
+      try {
+        const userItems = await postgres.query(findUserItems);
+        return items.rows;
+      } catch (e) {
+        throw (e);
+      }
     },
 
     async getBorrowedItemsForUser(id) {
@@ -100,10 +112,10 @@ module.exports = postgres => {
       return items.rows;
     },
     async getTags() { //no argument because you want all tags. 
-      try{
-      const tags = await postgres.query('SELECT * FROM tags');
-      return tags.rows;
-      } catch(e){
+      try {
+        const tags = await postgres.query('SELECT * FROM tags');
+        return tags.rows;
+      } catch (e) {
         throw e;
       }
     },
@@ -117,7 +129,10 @@ module.exports = postgres => {
       const tags = await postgres.query(tagsQuery);
       return tags.rows;
     },
-    async saveNewItem({ item, user }) {
+    async saveNewItem({
+      item,
+      user
+    }) {
       /**
        *  @TODO: Adding a New Item
        *
@@ -147,12 +162,16 @@ module.exports = postgres => {
           try {
             // Begin postgres transaction
             client.query('BEGIN', async err => {
-              const { title, description, tags } = item;
+              const {
+                title,
+                description,
+                tags
+              } = item;
 
               // Generate new Item query
               // @TODO
               // -------------------------------
-            
+
               client.query('SELECT * FROM items', (err, res) => {
                 if (err) {
                   console.log(err.stack)
