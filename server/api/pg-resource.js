@@ -69,14 +69,14 @@ module.exports = postgres => {
 
     async getItems(idToOmit) {
       const findItems = {
-        text: 'SELECT * FROM items WHERE itemowner != $1',
+        text: `SELECT * FROM items WHERE itemowner != $1 ORDER BY created DESC`,
         values: idToOmit ? [idToOmit] : []
       };
       try {
         const items = await postgres.query(findItems);
         return items.rows;
       } catch (e) {
-        throw 'Error fetching items';
+        throw 'Error fetching items available';
       }
     },
 
