@@ -125,13 +125,15 @@ module.exports = postgres => {
 
     async getTagsForItem(id) {
       const tagsQuery = {
-        text: ``, // @TODO: Advanced queries
+        text: `SELECT * FROM itemtags as it INNER JOIN tags ON it.tagid = tags.id WHERE itemid=$1`,
         values: [id]
       };
 
       const tags = await postgres.query(tagsQuery);
       return tags.rows;
     },
+
+
     async saveNewItem({
       item,
       user
