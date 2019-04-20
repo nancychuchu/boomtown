@@ -8,23 +8,19 @@ function tagsQueryString(tags, itemid, result) {
    *  - Is this
    */
   const length = tags.length;
-  return length === 0 ?
-    `${result};` :
-    tags.shift() &&
-    tagsQueryString(
-      tags,
-      itemid,
-      `${result}($${tags.length + 1}, ${itemid})${length === 1 ? '' : ','}`
-    );
+  return length === 0
+    ? `${result};`
+    : tags.shift() &&
+        tagsQueryString(
+          tags,
+          itemid,
+          `${result}($${tags.length + 1}, ${itemid})${length === 1 ? '' : ','}`
+        );
 }
 
 module.exports = postgres => {
   return {
-    async createUser({
-      fullname,
-      email,
-      password
-    }) {
+    async createUser({ fullname, email, password }) {
       const newUserInsert = {
         text: '', // @TODO: Authentication - Server
         values: [fullname, email, password]
@@ -43,6 +39,7 @@ module.exports = postgres => {
         }
       }
     },
+
     async getUserAndPasswordForVerification(email) {
       const findUserQuery = {
         text: '', // @TODO: Authentication - Server
@@ -56,22 +53,21 @@ module.exports = postgres => {
         throw 'User was not found.';
       }
     },
+
     async getUserById(id) {
       const findUserQuery = {
-        text: 'SELECT * FROM users WHERE id = $1', // @TODO: Basic queries
-        values: id ? [id] : [],
+        text: 'SELECT * FROM users WHERE id = $1', 
+        values: id ? [id] : []
       };
-
       try {
-        const user = await postgres.query(findUserQuery)
+        const user = await postgres.query(findUserQuery);
         return user.rows[0];
       } catch (e) {
-        throw (e);
+        throw 'User was not found';
       }
     },
 
     async getItems(idToOmit) {
-
       const findItems = {
         text: 'SELECT * FROM items WHERE itemowner != $1',
         values: idToOmit ? [idToOmit] : []
@@ -81,7 +77,7 @@ module.exports = postgres => {
         const items = await postgres.query(findItems);
         return items.rows;
       } catch (e) {
-        throw (e);
+        throw 'Error fetching items';
       }
     },
 
@@ -95,22 +91,20 @@ module.exports = postgres => {
         const items = await postgres.query(findUserItems);
         return items.rows;
       } catch (e) {
-        throw (e);
+        throw 'Error fetching items';
       }
     },
 
     async getBorrowedItemsForUser(id) {
-
-      const findUserBorrowed = {
+      const findBorrowedItems = {
         text: `SELECT * FROM items LEFT JOIN users ON items.itemowner = users.id WHERE borrower = $1`,
         values: id ? [id] : []
       };
-
       try {
         const items = await postgres.query(findUserBorrowed);
         return items.rows;
       } catch (e) {
-        throw (e);
+        throw 'Error fetching items';
       }
     },
 
@@ -119,25 +113,24 @@ module.exports = postgres => {
         const tags = await postgres.query('SELECT * FROM tags');
         return tags.rows;
       } catch (e) {
-        throw e;
+        throw 'Error fetching tags';
       }
     },
 
     async getTagsForItem(id) {
       const tagsQuery = {
         text: `SELECT * FROM itemtags as it INNER JOIN tags ON it.tagid = tags.id WHERE itemid=$1`,
-        values: [id]
+        values: id ? [id] : []
       };
-
-      const tags = await postgres.query(tagsQuery);
-      return tags.rows;
+      try {
+        const tags = await postgres.query(tagsQuery);
+        return tags.rows;
+      } catch (e) {
+        throw 'Error fetching tags for item';
+      }
     },
 
-
-    async saveNewItem({
-      item,
-      user
-    }) {
+    async saveNewItem({ item, user }) {
       /**
        *  @TODO: Adding a New Item
        *
@@ -167,11 +160,7 @@ module.exports = postgres => {
           try {
             // Begin postgres transaction
             client.query('BEGIN', async err => {
-              const {
-                title,
-                description,
-                tags
-              } = item;
+              const { title, description, tags } = item;
 
               // Generate new Item query
               // @TODO
@@ -179,9 +168,9 @@ module.exports = postgres => {
 
               client.query('SELECT * FROM items', (err, res) => {
                 if (err) {
-                  console.log(err.stack)
+                  console.log(err.stack);
                 } else {
-                  console.log(res.rows[0])
+                  console.log(res.rows[0]);
                 }
               });
 
