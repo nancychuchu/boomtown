@@ -89,11 +89,10 @@ module.exports = postgres => {
       const findUserItems = {
         text: `SELECT * FROM items LEFT JOIN users ON items.itemowner = users.id WHERE itemowner = $1`,
         values: id ? [id] : []
-
       };
 
       try {
-        const userItems = await postgres.query(findUserItems);
+        const items = await postgres.query(findUserItems);
         return items.rows;
       } catch (e) {
         throw (e);
@@ -101,17 +100,21 @@ module.exports = postgres => {
     },
 
     async getBorrowedItemsForUser(id) {
-      const items = await postgres.query({
-        /**
-         *  @TODO: Advanced queries
-         *  Get all Items. Hint: You'll need to use a LEFT INNER JOIN among others
-         */
-        text: ``,
-        values: [id]
-      });
-      return items.rows;
+
+      const findUserBorrowed = {
+        text: `SELECT * FROM items LEFT JOIN users ON items.itemowner = users.id WHERE borrower = $1`,
+        values: id ? [id] : []
+      };
+
+      try {
+        const items = await postgres.query(findUserItems);
+        return items.rows;
+      } catch (e) {
+        throw (e);
+      }
     },
-    async getTags() { //no argument because you want all tags. 
+
+    async getTags() {
       try {
         const tags = await postgres.query('SELECT * FROM tags');
         return tags.rows;
