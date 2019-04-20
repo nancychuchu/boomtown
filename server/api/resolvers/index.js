@@ -48,8 +48,7 @@ module.exports = app => {
       async user(parent, { id }, { pgResource }, info) {
         try {
           const user = await pgResource.getUserById(id);
-
-          if (user == null) {
+          if (!user) {
             throw 'User was not found.';
           }
           return user;

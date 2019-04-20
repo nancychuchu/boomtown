@@ -56,7 +56,7 @@ module.exports = postgres => {
 
     async getUserById(id) {
       const findUserQuery = {
-        text: 'SELECT * FROM users WHERE id = $1', 
+        text: 'SELECT * FROM users WHERE id = $1',
         values: id ? [id] : []
       };
       try {
@@ -72,7 +72,6 @@ module.exports = postgres => {
         text: 'SELECT * FROM items WHERE itemowner != $1',
         values: idToOmit ? [idToOmit] : []
       };
-
       try {
         const items = await postgres.query(findItems);
         return items.rows;
@@ -86,12 +85,11 @@ module.exports = postgres => {
         text: `SELECT * FROM items LEFT JOIN users ON items.itemowner = users.id WHERE itemowner = $1`,
         values: id ? [id] : []
       };
-
       try {
         const items = await postgres.query(findUserItems);
         return items.rows;
       } catch (e) {
-        throw 'Error fetching items';
+        throw 'Error fetching user items';
       }
     },
 
@@ -101,10 +99,10 @@ module.exports = postgres => {
         values: id ? [id] : []
       };
       try {
-        const items = await postgres.query(findUserBorrowed);
+        const items = await postgres.query(findBorrowedItems);
         return items.rows;
       } catch (e) {
-        throw 'Error fetching items';
+        throw 'Error fetching borrowed items';
       }
     },
 
