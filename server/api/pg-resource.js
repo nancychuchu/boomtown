@@ -107,7 +107,7 @@ module.exports = postgres => {
       };
 
       try {
-        const items = await postgres.query(findUserItems);
+        const items = await postgres.query(findUserBorrowed);
         return items.rows;
       } catch (e) {
         throw (e);
