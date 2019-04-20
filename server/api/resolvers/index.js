@@ -99,20 +99,28 @@ module.exports = app => {
         pgResource
       }) {
         try {
-          const itemsByUser = await pgResource.getItemsForUser(id);
-          console.log(itemsByUser)
+          const items = await pgResource.getItemsForUser(id);
+          return items;
         } catch (e) {
           throw new ApolloError(e);
         }
       },
 
 
-      // borrowed() {
-      //   // @TODO: Replace this mock return statement with the correct items from Postgres
-      //   return []
-      //   // -------------------------------
-      // }
-      // -------------------------------
+      async borrowed({
+          id
+        },
+        args, {
+          pgResource
+        }) {
+        try {
+          const items = await pgResource.getBorrowedItemsForUser(id);
+          return items;
+        } catch (e) {
+          throw new ApolloError(e);
+        }
+      }
+
     },
 
     Item: {
