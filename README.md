@@ -1,5 +1,9 @@
 # Boomtown 🏙
 
+## Summary
+
+This webapp is a platform that allows users to upload items and view other members' items to loan and borrow them thus encouraging a share economy.
+
 ## Server
 
 Commands must be run from the `server` directory:
@@ -90,4 +94,17 @@ Run all tests:
 npm run test
 ```
 
+## Technologies Used
 
+- JavaScript
+- Apollo
+- GraphQL
+- Node.js
+- PostGres
+- CLI
+- Express
+- Git
+
+## Author
+
+[Nancy Chu]
