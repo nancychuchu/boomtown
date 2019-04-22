@@ -95,8 +95,8 @@ module.exports = postgres => {
 
     async getBorrowedItemsForUser(id) {
       const findBorrowedItems = {
-        text: `SELECT * FROM items LEFT JOIN users ON items.itemowner = users.id WHERE borrower = $1`,
-        values: id ? [id] : []
+        text: `SELECT * FROM items WHERE borrower = $1`,
+        values: [id]
       };
       try {
         const items = await postgres.query(findBorrowedItems);

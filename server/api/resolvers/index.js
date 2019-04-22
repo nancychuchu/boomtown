@@ -102,7 +102,7 @@ module.exports = app => {
           const owner = await pgResource.getUserById(itemowner);
           return owner;
         } catch (e) {
-          throw new ApolloError();
+          throw new ApolloError(e);
         }
       },
 
@@ -111,7 +111,7 @@ module.exports = app => {
           const tags = await pgResource.getTagsForItem(item.id);
           return tags;
         } catch (e) {
-          throw new ApolloError();
+          throw new ApolloError(e);
         }
       },
 
@@ -121,7 +121,7 @@ module.exports = app => {
           const itemBorrower = await pgResource.getUserById(borrower);
           return itemBorrower;
         } catch (e) {
-          throw new ApolloError();
+          throw new ApolloError(e);
         }
       }
     },
