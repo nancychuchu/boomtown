@@ -160,9 +160,13 @@ module.exports = postgres => {
             client.query('BEGIN', async err => {
               const { title, description, tags } = item;
 
-              // Generate new Item query
-              // @TODO
-              // -------------------------------
+              // Generate new Item query - Stretch Goal
+
+              const newItemQuery = {
+                text:
+                  'INSERT INTO items (title, description, itemowner) VALUES ($1, $2, $3)',
+                values: [title, description, user.id]
+              };
 
               client.query('SELECT * FROM items', (err, res) => {
                 if (err) {
@@ -175,6 +179,8 @@ module.exports = postgres => {
               // Insert new Item
               // @TODO
               // -------------------------------
+              const newItem = await postgres.query(newItemQuery);
+              return newItem;
 
               // Generate tag relationships query (use the'tagsQueryString' helper function provided)
               // @TODO
