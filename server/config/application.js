@@ -6,8 +6,7 @@ const express = require('express');
 const fallback = require('express-history-api-fallback');
 const path = require('path');
 
-
-module.exports = (app) => {
+module.exports = app => {
   const PORT = process.env.PORT || 8080;
 
   /**
@@ -17,7 +16,7 @@ module.exports = (app) => {
    *  JWT_COOKIE_NAME
    */
 
-  //set environment variables. 
+  //set environment variables.
   app.set('PORT', PORT);
   app.set('PG_HOST', process.env.PG_HOST || 'localhost');
   app.set('PG_USER', process.env.PG_USER || 'boomtown');
@@ -31,9 +30,11 @@ module.exports = (app) => {
 
     // Serve the static front-end from /public when deployed
     app.use(express.static(root));
-    app.use(fallback('index.html', {
-      root
-    }));
+    app.use(
+      fallback('index.html', {
+        root
+      })
+    );
   }
 
   if (process.env.NODE_ENV === 'development') {
