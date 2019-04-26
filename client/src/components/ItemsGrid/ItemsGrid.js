@@ -2,18 +2,15 @@ import React from 'react';
 import { withStyles } from '@material-ui/core';
 import styles from './Styles';
 import Grid from '@material-ui/core/Grid';
-// import Paper from '@material-ui/core/Paper';
 import ItemCard from '../ItemCard';
 
-const ItemsGrid = ({ items }) => {
+const ItemsGrid = ({ classes, items }) => {
   return (
-    <Grid container spacing={16}>
+    <Grid container spacing={16} className={classes.root}>
       <Grid item xs={12}>
         <Grid container justify="center">
           {items.map(item => (
-            // <Grid key={item.value} item>
             <ItemCard key={item.id} item={item} />
-            // </Grid>
           ))}
         </Grid>
       </Grid>
