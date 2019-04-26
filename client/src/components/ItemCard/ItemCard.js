@@ -8,8 +8,13 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Gravatar from 'react-gravatar';
+import Moment from 'moment';
 
 const ItemCard = ({ classes, item }) => {
+  const dateFrom = Moment(
+    item.created.substring(0, 9).replace('-', '/')
+  ).fromNow();
+
   return (
     <Card className={classes.card}>
       {/* <CardActionArea> */}
@@ -18,37 +23,24 @@ const ItemCard = ({ classes, item }) => {
         image={item.imageurl}
         title="A look at the item "
       />
-      {/* <CardContent
-        avatar={
-          <Gravatar className={classes.gravatar} email={item.itemowner.email} />
-        }
-        owner={<Typography>{item.itemowner.fullname}</Typography>}
-        date={<Typography variant="caption">{item.created}</Typography>}
-      /> */}
 
       <CardContent className={classes.mainContainer}>
-        
         <CardContent className={classes.ownerSection}>
           <Gravatar className={classes.gravatar} email={item.itemowner.email} />
-         
+
           <CardContent className={classes.ownerInfo}>
             <Typography>{item.itemowner.fullname}</Typography>
-            <Typography variant="caption">{item.created}</Typography>
+            <Typography variant="caption">{dateFrom}</Typography>
           </CardContent>
-        
         </CardContent>
 
         <Typography gutterBottom variant="headline" component="h2">
           {item.title}
         </Typography>
 
-        <CardContent className={classes.tags}>
-          {item.tags.map(tag => (
-            <Typography key={tag.id} variant="caption">
-              {tag.title}
-            </Typography>
-          ))}
-        </CardContent>
+        <Typography variant="caption" className={classes.tags}>
+          {item.tags.map(tag => tag.title).join(', ')}
+        </Typography>
 
         <Typography component="p">{item.description}</Typography>
       </CardContent>

@@ -1,7 +1,7 @@
 const styles = {
   card: {
     width: 340,
-    height: 550,
+    height: 500,
     margin: 10,
     position: 'relative'
   },
@@ -18,6 +18,7 @@ const styles = {
   },
   ownerSection: {
     display: 'flex',
+    padding: 0,
     marginBottom: 10
   },
   ownerInfo: {
