@@ -1,4 +1,7 @@
 import React from 'react';
+import Grid from '@material-ui/core/Grid';
+// import Typography from '@material-ui/core/Typography';
+
 /* 
   TODO: Create ShareItemFrom and ShareItemPreview in the components dir
   and call them from this file.
@@ -10,16 +13,26 @@ import React from 'react';
   Hint: It should look like any other Item card.
 
 */
-// import ShareItemForm from '../../components/ShareItemForm';
-// import ShareItemPreview from '../../components/ShareItemPreview';
+import ShareItemForm from '../../components/ShareItemForm';
+import ShareItemPreview from '../../components/ShareItemPreview';
 
-const Share = ({ classes }) => {
+const Share = ({ classes, tags }) => {
   return (
-    <div>
-      <p>
-        This is the share page located at <code>/share</code>.
-      </p>
-    </div>
+    <Grid
+      container
+      className={classes.root}
+      direction="row"
+      alignItems="center"
+      justify="center"
+    >
+      <Grid item xs={12} sm={12} md={6}>
+        <ShareItemPreview />
+      </Grid>
+
+      <Grid item xs={12} sm={12} md={6}>
+        <ShareItemForm tags={tags} />
+      </Grid>
+    </Grid>
   );
 };
 

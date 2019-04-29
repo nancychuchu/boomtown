@@ -1,9 +1,10 @@
-const styles = {
+const styles = theme => ({
   root: {
     flexGrow: 1,
-    backgroundColor: 'black',
-    padding: 20
+    paddingTop: 64,
+
+    backgroundColor: theme.palette.secondary.main
   }
-};
+});
 
 export default styles;
