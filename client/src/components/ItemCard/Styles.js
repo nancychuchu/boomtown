@@ -1,7 +1,7 @@
 const styles = {
   card: {
-    width: 340,
-    height: 500,
+    width: 400,
+    height: 600,
     margin: 10,
     position: 'relative'
   },
