@@ -1,6 +1,6 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core';
-import styles from './Styles';
+import styles from './styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -12,7 +12,8 @@ import Moment from 'moment';
 
 const ItemCard = ({ classes, item }) => {
   const dateFrom = Moment(
-    item.created.substring(0, 9).replace('-', '/')
+    item.created
+    //.substring(0, 9).replace('-', '/')
   ).fromNow();
 
   return (
@@ -59,4 +60,24 @@ const ItemCard = ({ classes, item }) => {
   );
 };
 
+ItemCard.defaultProps = {
+  item: {
+    id: 10,
+    title: 'tbd',
+    imageurl: 'https://loremflickr.com/320/240/dog',
+    description: 'To be added',
+    itemowner: {
+      id: 100,
+      fullname: 'TBD',
+      email: 'anonymous@anonymous.com'
+    },
+    tags: [
+      {
+        id: 100,
+        title: 'To Be Determined'
+      }
+    ],
+    created: '2019-04-29'
+  }
+};
 export default withStyles(styles)(ItemCard);
