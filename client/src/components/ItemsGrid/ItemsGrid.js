@@ -1,6 +1,6 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core';
-import styles from './Styles';
+import styles from './styles';
 import Grid from '@material-ui/core/Grid';
 import ItemCard from '../ItemCard';
 
@@ -9,9 +9,7 @@ const ItemsGrid = ({ classes, items }) => {
     <Grid container spacing={16} className={classes.root}>
       <Grid item xs={12}>
         <Grid container justify="center">
-          {items.map(item => (
-            <ItemCard key={item.id} item={item} />
-          ))}
+          {items.map(item => <ItemCard key={item.id} item={item} />)}
         </Grid>
       </Grid>
     </Grid>
