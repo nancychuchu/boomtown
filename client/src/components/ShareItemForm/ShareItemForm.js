@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { Form, Field, FormSpy } from 'react-final-form';
 import { connect } from 'react-redux';
-
 import { withStyles } from '@material-ui/core/styles';
 import styles from './styles';
 import { Typography, Button } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
-import Input from '@material-ui/core/Input';
+// import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
@@ -19,27 +18,76 @@ import {
   resetImage
 } from '../../redux/ShareItemPreview/reducer';
 
-const photoInput = React.createRef();
-const selectedTags = [];
-
 class ShareForm extends Component {
   constructor(props) {
     super(props);
+
+    this.fileInput = React.createRef();
+
     this.state = {
-      photoInput: React.createRef(),
+      fileSelected: false,
+      done: false,
       selectedTags: []
     };
   }
 
-  handleClick() {
-    this.state.photoInput.current.click();
+  handleSelectTag = e => {
+    this.setState({
+      selectedTags: e.target.value
+    });
+  };
+
+  handleSelectFile = e => {
+    this.setState({
+      fileSelected: this.fileInput.current.files[0]
+    });
+  };
+
+  //convert array of tags into array of objects
+  applyTags(tags) {
+    return (
+      tags &&
+      tags
+        .filter(t => this.state.selectedTags.indexOf(t.id) > -1)
+        .map(t => ({ title: t.title, id: t.id }))
+    );
   }
 
-  handleChange(e) {
-    this.state.selectedTags.push(e.target.value);
+  getBase64Url() {
+    return new Promise(resolve => {
+      const reader = new FileReader(); //FileReader is a JavaScript class
+      reader.onload = e => {
+        resolve(
+          `data:${this.state.fileSelected.type};base64, ${btoa(
+            e.target.result
+          )}`
+        );
+      };
+      reader.readAsBinaryString(this.state.fileSelected);
+    });
+  }
+
+  triggerClick = () => {
+    this.fileInput.current.click();
+  };
+
+  resetFileInput = () => {
+    this.fileInput.current.value = '';
+    this.props.resetImage();
+    this.setState({
+      fileSelected: false
+    });
+  };
+
+  generateTagsText(tags, selected) {
+    return tags
+      .map(t => (selected.indexOf(t.id) > -1 ? t.title : false))
+      .filter(e => e)
+      .join(', ');
   }
 
   dispatchUpdate(values, tags, updateItem) {
+    console.log(values);
     if (!values.imageurl && this.state.fileSelected) {
       this.getBase64Url().then(imageurl => {
         updateItem({
@@ -48,18 +96,19 @@ class ShareForm extends Component {
       });
     }
     updateItem({
-      ...values
-      // tags: this.applyTags(tags)
+      ...values,
+      tags: this.applyTags(tags)
     });
   }
+
   render() {
-    const { classes, tags } = this.props;
+    const { classes, tags, resetImage, resetFile, updateItem } = this.props;
+    const { selectedTags, fileSelected } = this.state;
+
     return (
       <Form
         onSubmit={values => this.saveItem(values, tags)}
-        render={() => {
-          console.log(this.props);
-
+        render={({ handleSubmit, pristine, invalid, form }) => {
           return (
             <div>
               <Typography
@@ -69,23 +118,27 @@ class ShareForm extends Component {
               >
                 Share. <br /> Borrow. <br /> Prosper.
               </Typography>
-
               <Button
-                onClick={this.handleClick}
+                onClick={fileSelected ? this.resetFileInput : this.triggerClick}
                 variant="contained"
-                className={classes.button}
+                className={fileSelected ? classes.selected : classes.unselected}
               >
                 <input
                   hidden
                   type="file"
-                  ref={photoInput}
+                  ref={this.fileInput}
+                  onChange={e => this.handleSelectFile(e)}
                   accept="image/*"
                   id="fileInput"
                 />
-                SELECT AN IMAGE
+                {fileSelected ? (
+                  <div> RESET IMAGE </div>
+                ) : (
+                  <div> SELECT AN IMAGE </div>
+                )}
               </Button>
 
-              <form>
+              <form onSubmit={handleSubmit}>
                 <FormSpy
                   subscription={{ values: true }}
                   component={({ values }) => {
@@ -95,15 +148,14 @@ class ShareForm extends Component {
                     return '';
                   }}
                 />
-
                 <Field
                   name="title"
                   render={({ input, meta }) => (
                     <div>
-                      {console.log(input)}
-                      {console.log(meta)}
                       <TextField
+                        name="title"
                         className={classes.textInput}
+                        onChange={input.onChange}
                         id="standard-name"
                         margin="normal"
                         placeholder="Name your item"
@@ -112,15 +164,16 @@ class ShareForm extends Component {
                     </div>
                   )}
                 />
-
                 <Field
-                  name="Description "
+                  name="description"
                   className={classes.form}
                   render={({ input, meta }) => (
                     <div>
                       <TextField
+                        name="description"
                         className={classes.textInput}
-                        id="standard-name"
+                        onChange={input.onChange}
+                        id="description"
                         multiline
                         rows="4"
                         placeholder="Describe your item"
@@ -130,32 +183,38 @@ class ShareForm extends Component {
                     </div>
                   )}
                 />
-
                 <FormControl className={classes.formControl}>
                   <InputLabel htmlFor="select-multiple-checkbox">
                     Tag
                   </InputLabel>
-                  <Select
-                    className={classes.textInput}
-                    multiple
-                    value={selectedTags}
-                    onChange={this.handleChange}
-                    input={<Input id="select-multiple-checkbox" />}
-                    renderValue={selected => selected.join(', ')}
-                    // MenuProps={MenuProps}
-                  >
-                    {tags.map(tag => (
-                      <MenuItem key={tag.id} value={tag.title}>
-                        <Checkbox
-                          checked={selectedTags.indexOf(tag.title) > -1}
-                        />
-                        <ListItemText primary={tag.title} />
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
 
-                <Button>Share</Button>
+                  <Field name="tags">
+                    {({ input, meta }) => {
+                      return (
+                        <Select
+                          multiple
+                          value={selectedTags}
+                          onChange={e => this.handleSelectTag(e)}
+                          className={classes.textInput}
+                          renderValue={selected => {
+                            return this.generateTagsText(tags, selected);
+                          }}
+                        >
+                          {tags &&
+                            tags.map(tag => (
+                              <MenuItem key={tag.id} value={tag.id}>
+                                <Checkbox
+                                  checked={selectedTags.indexOf(tag.id) > -1}
+                                />
+                                <ListItemText primary={tag.title} />
+                              </MenuItem>
+                            ))}
+                        </Select>
+                      );
+                    }}
+                  </Field>
+                </FormControl>
+                <Button type="submit">Share</Button>
               </form>
             </div>
           );
