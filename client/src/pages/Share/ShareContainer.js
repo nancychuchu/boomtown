@@ -14,8 +14,7 @@ class ShareContainer extends Component {
           if (loading) return 'Loading...'; //later we'll change Loading... to a loading screen.
           if (error) return `Error! ${error.message}`;
           if (data) {
-            console.log(data);
-            return <Share classes={this.props.classes} tags={data.tags} />;
+            return <Share tags={data.tags} />;
           }
         }}
       </Query>

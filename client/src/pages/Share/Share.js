@@ -1,8 +1,9 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
-// import Typography from '@material-ui/core/Typography';
+import { withStyles } from '@material-ui/core/styles';
 import ShareItemForm from '../../components/ShareItemForm';
 import ShareItemPreview from '../../components/ShareItemPreview';
+import styles from './styles';
 
 const Share = ({ classes, tags }) => {
   return (
@@ -24,4 +25,4 @@ const Share = ({ classes, tags }) => {
   );
 };
 
-export default Share;
+export default withStyles(styles)(Share);
