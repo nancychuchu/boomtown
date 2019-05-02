@@ -18,11 +18,16 @@ function tagsQueryString(tags, itemid, result) {
         );
 }
 
+// function tagsQueryString(tags, itemid, result){
+// tags.map(tag=>`(${tag.id'},${itemid})`).join(",")
+//   }
+
 module.exports = postgres => {
   return {
     async createUser({ fullname, email, password }) {
       const newUserInsert = {
-        text: '', // @TODO: Authentication - Server
+        text:
+          'INSERT INTO users (fullname, email, password) VALUES ($1, $2, $3) RETURNING *',
         values: [fullname, email, password]
       };
       try {
@@ -42,7 +47,8 @@ module.exports = postgres => {
 
     async getUserAndPasswordForVerification(email) {
       const findUserQuery = {
-        text: '', // @TODO: Authentication - Server
+        //find user where the email matches provided email.
+        text: 'SELECT * FROM users WHERE email = $1',
         values: [email]
       };
       try {
@@ -160,35 +166,26 @@ module.exports = postgres => {
             client.query('BEGIN', async err => {
               const { title, description, tags } = item;
 
+              console.log(user);
               // Generate new Item query - Stretch Goal
-
               const newItemQuery = {
                 text:
-                  'INSERT INTO items (title, description, itemowner) VALUES ($1, $2, $3)',
-                values: [title, description, user.id]
+                  'INSERT INTO items (title, description, itemowner) VALUES ($1, $2, $3) RETURNING *',
+                values: [title, description, user]
               };
 
-              client.query('SELECT * FROM items', (err, res) => {
-                if (err) {
-                  console.log(err.stack);
-                } else {
-                  console.log(res.rows[0]);
-                }
-              });
-
-              // Insert new Item
-              // @TODO
-              // -------------------------------
               const newItem = await postgres.query(newItemQuery);
-              return newItem;
 
-              // Generate tag relationships query (use the'tagsQueryString' helper function provided)
-              // @TODO
-              // -------------------------------
+              const newTagsQuery = {
+                text: `INSERT INTO itemtags (tagid, itemid) VALUES ${tagsQueryString(
+                  [...tags],
+                  newItem.rows[0].id,
+                  ''
+                )}`,
+                values: tags.map(tag => tag.id)
+              };
 
-              // Insert tags
-              // @TODO
-              // -------------------------------
+              const newTags = await client.query(newTagsQuery);
 
               // Commit the entire transaction!
               client.query('COMMIT', err => {
@@ -198,7 +195,7 @@ module.exports = postgres => {
                 // release the client back to the pool
                 done();
                 // Uncomment this resolve statement when you're ready!
-                // resolve(newItem.rows[0])
+                resolve(newItem.rows[0]);
                 // -------------------------------
               });
             });
