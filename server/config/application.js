@@ -9,12 +9,9 @@ const path = require('path');
 module.exports = app => {
   const PORT = process.env.PORT || 8080;
 
-  /**
-   *  @TODO: Configuration Variables
-   *  JWT_SECRET
-   *  And the following non-security related information should also be set for use elsewhere:
-   *  JWT_COOKIE_NAME
-   */
+  //set configuration variables.
+  app.set('JWT_SECRET', process.env.JWT_SECRET || 'keyboardcat');
+  app.set('JWT_COOKIE_NAME', 'bt-token');
 
   //set environment variables.
   app.set('PORT', PORT);
@@ -23,6 +20,7 @@ module.exports = app => {
   app.set('PG_PASSWORD', process.env.PG_PASSWORD || 'boomtown');
   app.set('PG_DB', process.env.PG_DB || 'boomtown');
 
+  //middleware
   app.use(cookieParser());
 
   if (process.env.NODE_ENV === 'production') {
