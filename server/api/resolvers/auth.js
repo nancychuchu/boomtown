@@ -3,59 +3,29 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 function setCookie({ tokenName, token, res }) {
-  /**
-   *  @TODO: Authentication - Server
-   *
-   *  This helper function is responsible for attaching a cookie to the HTTP
-   *  response. 'apollo-server-express' handles returning the response to the client.
-   *  We added the 'req' object to the resolver context so we can use it to atttach the cookie.
-   *  The 'req' object comes from express.
-   *
-   *  A secure cookie that can be used to store a user's session data has the following properties:
-   *  1) It can't be accessed from JavaScript
-   *  2) It will only be sent via https (but we'll have to disable this in development using NODE_ENV)
-   *  3) A boomtown cookie should oly be valid for 2 hours.
-   */
-  // Refactor this method with the correct configuration values.
+  //res is the express response object with a cookie method.
   res.cookie(tokenName, token, {
-    // @TODO: Supply the correct configuration values for our cookie here
+    httpOnly: true, //this protects the cookie.
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 1000 * 60 * 60 * 2 // 2h. How cookie should live.
   });
-  // -------------------------------
 }
 
+//create token for user who's logged in
 function generateToken(user, secret) {
   const { id, email, fullname, bio } = user; // Omit the password from the token
-  /**
-   *  @TODO: Authentication - Server
-   *
-   *  This helper function is responsible for generating the JWT token.
-   *  Here, we'll be taking a JSON object representing the user (the 'J' in JWT)
-   *  and cryptographically 'signing' it using our app's 'secret'.
-   *  The result is a cryptographic hash representing out JSON user
-   *  which can be decoded using the app secret to retrieve the stateless session.
-   */
-  // Refactor this return statement to return the cryptographic hash (the Token)
-  return '';
-  // -------------------------------
+  //sign is encrypting it with a secret (key) and specifies expiration time
+  return jwt.sign({ id, email, fullname, bio }, secret, { expiresIn: '2h' });
 }
 
-module.exports = (app) => {
+module.exports = app => {
   return {
     async signup(parent, args, context) {
+      console.log(args);
+      const {} = args;
       try {
-        /**
-         * @TODO: Authentication - Server
-         *
-         * Storing passwords in your project's database requires some basic security
-         * precautions. If someone gains access to your database, and passwords
-         * are stored in 'clear-text' your users accounts immediately compromised.
-         *
-         * The solution is to create a cryptographic hash of the password provided,
-         * and store that instead. The password can be decoded using the original password.
-         */
-        // @TODO: Use bcrypt to generate a cryptographic hash to conceal the user's password before storing it.
-        const hashedPassword = '';
-        // -------------------------------
+        // Use bcrypt to generate a cryptographic hash to conceal the user's password before storing it.
+        const hashedPassword = await bcrypt.hash(args.user.password, 10);
 
         const user = await context.pgResource.createUser({
           fullname: args.user.fullname,
@@ -63,9 +33,12 @@ module.exports = (app) => {
           password: hashedPassword
         });
 
+        const encodedToken = generateToken(user, app.get('JWT_SECRET'));
+
+        console.log(`JWT: ${encodedToken}`);
         setCookie({
           tokenName: app.get('JWT_COOKIE_NAME'),
-          token: generateToken(user, app.get('JWT_SECRET')),
+          token: encodedToken,
           res: context.req.res
         });
 
@@ -78,30 +51,33 @@ module.exports = (app) => {
     },
 
     async login(parent, args, context) {
+      //to match schema.
+      const { email, password } = args.user;
+      console.log(email, password);
+
       try {
         const user = await context.pgResource.getUserAndPasswordForVerification(
           args.user.email
         );
 
-        /**
-         *  @TODO: Authentication - Server
-         *
-         *  To verify the user has provided the correct password, we'll use the provided password
-         *  they submitted from the login form to decrypt the 'hashed' version stored in out database.
-         */
-        // Use bcrypt to compare the provided password to 'hashed' password stored in your database.
-        const valid = false;
+        //pass non encrypted password then the password from the user. Add await because compare is an async function.
+        const valid = await bcrypt.compare(password, user.password);
+
         // -------------------------------
         if (!valid || !user) throw 'User was not found.';
 
+        const encodedToken = generateToken(user, app.get('JWT_SECRET'));
+
         setCookie({
           tokenName: app.get('JWT_COOKIE_NAME'),
-          token: generateToken(user, app.get('JWT_SECRET')),
+          token: encodedToken,
           res: context.req.res
         });
 
         return {
-          id: user.id
+          id: user.id,
+          fullname: user.fullname,
+          email: user.email
         };
       } catch (e) {
         throw new AuthenticationError(e);

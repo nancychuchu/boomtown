@@ -3,10 +3,22 @@
 const { ApolloError } = require('apollo-server-express');
 
 // @TODO: Uncomment these lines later when we add auth
-// const jwt = require("jsonwebtoken")
-// const authMutations = require("./auth")
+const jwt = require('jsonwebtoken');
+
+//takes everything from auth.js file
+const authMutations = require('./auth');
 // -------------------------------
-const { DateScalar } = require('../custom-types');
+// const { DateScalar } = require('../custom-types');
+
+module.exports = app => {
+  // authMutations = {
+  //   signup: () => {},
+  //   login: () => {},
+  //   logout: () => {}
+  // }
+};
+
+// const authMutations = AuthMutationsFunction(app);
 
 module.exports = app => {
   return {
@@ -112,16 +124,20 @@ module.exports = app => {
     },
 
     Mutation: {
-      // @TODO: Uncomment this later when we add auth
-      // ...authMutations(app),
-      // -------------------------------
+      //authMutations gets loaded.
+      ...authMutations(app),
 
       //STRETCH GOAL : Try to addItem
-      async addItem(parent, { item }, { pgResource }, info) {
+      async addItem(parent, { item }, context, info) {
         try {
           //user placeholder
-          const user = 1;
-          const addedItem = await pgResource.saveNewItem(item, user);
+          // const user = { id: '5' };
+
+          const user = context.token.id;
+          const addedItem = await context.pgResource.saveNewItem({
+            item: item,
+            user
+          });
           return addedItem;
         } catch (e) {
           throw new ApolloError(e);
