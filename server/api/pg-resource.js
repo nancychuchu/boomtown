@@ -88,8 +88,8 @@ module.exports = postgres => {
 
     async getItemsForUser(id) {
       const findUserItems = {
-        text: `SELECT * FROM items LEFT JOIN users ON items.itemowner = users.id WHERE itemowner = $1`,
-        values: id ? [id] : []
+        text: `SELECT * FROM items WHERE itemowner = $1`,
+        values: [id]
       };
       try {
         const items = await postgres.query(findUserItems);
@@ -174,7 +174,7 @@ module.exports = postgres => {
                 values: [title, description, user]
               };
 
-              const newItem = await postgres.query(newItemQuery);
+              const newItem = await client.query(newItemQuery);
 
               const newTagsQuery = {
                 text: `INSERT INTO itemtags (tagid, itemid) VALUES ${tagsQueryString(
