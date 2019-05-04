@@ -1,12 +1,12 @@
 const styles = {
   card: {
     width: 400,
-    height: 600,
+    height: 550,
     margin: 10,
     position: 'relative'
   },
   media: {
-    height: 200
+    height: 230
   },
   gravatar: {
     borderRadius: '50%'

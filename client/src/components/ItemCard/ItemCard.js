@@ -11,10 +11,7 @@ import Gravatar from 'react-gravatar';
 import Moment from 'moment';
 
 const ItemCard = ({ classes, item }) => {
-  const dateFrom = Moment(
-    item.created
-    //.substring(0, 9).replace('-', '/')
-  ).fromNow();
+  const dateFrom = Moment(item.created).fromNow();
 
   return (
     <Card className={classes.card}>
