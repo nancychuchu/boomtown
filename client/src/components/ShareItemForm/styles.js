@@ -16,6 +16,9 @@ const styles = theme => ({
 
   textInput: {
     width: '70%'
+  },
+  shareButton: {
+    marginTop: 20
   }
 });
 
