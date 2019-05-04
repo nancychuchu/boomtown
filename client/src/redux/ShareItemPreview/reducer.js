@@ -25,6 +25,7 @@ const initialState = {
   imageurl:
     'https://via.placeholder.com/350x250.png?text=Please+select+an+image',
   itemowner: {
+    fullname: 'Username',
     email: 'dummy@email.com'
   },
   created: new Date()
