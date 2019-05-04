@@ -13,26 +13,7 @@ import registerServiceWorker from './registerServiceWorker';
 import theme from './theme';
 
 import client from './apollo';
-
-/**
- * @TODO: Initialize Redux Store
- *
- *
- * Below in your <App />, wrap a <ReduxProvider /> component around all
- * of the app's children, and pass it the imported `store` as the `store`
- * prop's value.
- */
-
-/**
- * @TODO: Add the Viewer Context
- *
- * import { ViewerProvider } from './context/ViewerProvider'
- *
- * Below in your <App />, wrap the <ViewerProvider /> component around
- * the <BrowserRouter /> component so the router is aware of whether a
- * user is currently logged in and who that user is.
- */
-// -------------------------------
+import { ViewerProvider } from './context/ViewerProvider';
 
 import './index.css';
 
@@ -42,9 +23,11 @@ const App = () => {
       <MuiThemeProvider theme={theme}>
         <CssBaseline />
         <ApolloProvider client={client}>
-          <BrowserRouter>
-            <Layout />
-          </BrowserRouter>
+          <ViewerProvider>
+            <BrowserRouter>
+              <Layout />
+            </BrowserRouter>
+          </ViewerProvider>
         </ApolloProvider>
       </MuiThemeProvider>
     </ReduxProvider>
