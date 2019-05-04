@@ -64,7 +64,7 @@ module.exports = app => {
         const valid = await bcrypt.compare(password, user.password);
 
         // -------------------------------
-        if (!valid || !user) throw 'User was not found.';
+        if (!valid || !user) throw 'User / password combination was not found.';
 
         const encodedToken = generateToken(user, app.get('JWT_SECRET'));
 
