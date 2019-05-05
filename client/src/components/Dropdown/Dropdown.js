@@ -54,14 +54,14 @@ class LongMenu extends React.Component {
         >
           <Link to="profile">
             <MenuItem key={ProfileContainer} onClick={this.handleClose}>
-              <i className="fas fa-id-card" /> Profile
+              <i className="fas fa-id-card fa-fw" /> Profile
             </MenuItem>
           </Link>
 
           <Mutation mutation={LOGOUT_MUTATION}>
             {logout => (
               <MenuItem onClick={logoutMutation}>
-                <i className="fas fa-log-out-alt" /> Logout
+                <i className="fas fa-sign-out-alt" /> Logout
               </MenuItem>
             )}
           </Mutation>

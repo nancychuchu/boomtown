@@ -1,12 +1,13 @@
-import { withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import FormControl from '@material-ui/core/FormControl';
-import Grid from '@material-ui/core/Grid';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
 import React, { Component } from 'react';
-import Typography from '@material-ui/core/Typography';
-
+import { withStyles } from '@material-ui/core/styles';
+import {
+  Button,
+  FormControl,
+  Grid,
+  Input,
+  InputLabel,
+  Typography
+} from '@material-ui/core';
 import { Form, Field } from 'react-final-form';
 import {
   LOGIN_MUTATION,
@@ -39,7 +40,7 @@ class AccountForm extends Component {
             ? loginMutation(user).catch(error => this.setState({ error }))
             : signupMutation(user).catch(error => this.setState({ error }));
         }}
-        validate={validate}
+        validate={validate.bind(this)}
         render={({ handleSubmit, pristine, invalid }) => (
           <form onSubmit={handleSubmit} className={classes.accountForm}>
             {!this.state.formToggle && (
@@ -120,7 +121,6 @@ class AccountForm extends Component {
                     className={classes.formToggle}
                     type="button"
                     onClick={() => {
-                      // @TODO: Reset the form on submit
                       this.setState({
                         formToggle: !this.state.formToggle
                       });

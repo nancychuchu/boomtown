@@ -13,8 +13,6 @@ import { Link } from 'react-router-dom';
 
 const ItemCard = ({ classes, item }) => {
   const dateFrom = Moment(item.created).fromNow();
-  console.log(item.itemowner.id);
-
   return (
     <Card className={classes.card}>
       <CardMedia className={classes.media} image={item.imageurl} />
