@@ -9,28 +9,30 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Gravatar from 'react-gravatar';
 import Moment from 'moment';
+import { Link } from 'react-router-dom';
 
 const ItemCard = ({ classes, item }) => {
   const dateFrom = Moment(item.created).fromNow();
+  console.log(item.itemowner.id);
 
   return (
     <Card className={classes.card}>
-      {/* <CardActionArea> */}
-      <CardMedia
-        className={classes.media}
-        image={item.imageurl}
-        title="A look at the item "
-      />
+      <CardMedia className={classes.media} image={item.imageurl} />
 
       <CardContent className={classes.mainContainer}>
-        <CardContent className={classes.ownerSection}>
-          <Gravatar className={classes.gravatar} email={item.itemowner.email} />
+        <Link to={`/profile/${item.itemowner.id}`}>
+          <CardContent className={classes.ownerSection}>
+            <Gravatar
+              className={classes.gravatar}
+              email={item.itemowner.email}
+            />
 
-          <CardContent className={classes.ownerInfo}>
-            <Typography>{item.itemowner.fullname}</Typography>
-            <Typography variant="caption">{dateFrom}</Typography>
+            <CardContent className={classes.ownerInfo}>
+              <Typography>{item.itemowner.fullname}</Typography>
+              <Typography variant="caption">{dateFrom}</Typography>
+            </CardContent>
           </CardContent>
-        </CardContent>
+        </Link>
 
         <Typography gutterBottom variant="headline" component="h2">
           {item.title}
@@ -42,7 +44,7 @@ const ItemCard = ({ classes, item }) => {
 
         <Typography component="p">{item.description}</Typography>
       </CardContent>
-      {/* </CardActionArea> */}
+
       <CardActions>
         <Button
           className={classes.button}
