@@ -126,146 +126,158 @@ class ShareForm extends Component {
     const { selectedTags, fileSelected } = this.state;
 
     return (
-      <Mutation
-        // refetchQueries={() => [
-        //   { query: ALL_ITEMS_QUERY, variables: { id: viewer.id } }
-        // ]}
-        mutation={ADD_ITEM_MUTATION}
-      >
-        {addItem => (
-          <Form
-            onSubmit={async values => {
-              addItem({
-                variables: { item: { ...values, tags: this.applyTags(tags) } }
-              });
-              resetItem();
-            }}
-            render={({ handleSubmit, pristine, invalid, form }) => {
-              return (
-                <div>
-                  <Typography
-                    variant="display3"
-                    className={classes.typography}
-                    gutterBottom
-                  >
-                    Share. <br /> Borrow. <br /> Prosper.
-                  </Typography>
-                  <Button
-                    onClick={
-                      fileSelected ? this.resetFileInput : this.triggerClick
-                    }
-                    variant="contained"
-                    className={
-                      fileSelected ? classes.selected : classes.unselected
-                    }
-                  >
-                    <input
-                      hidden
-                      type="file"
-                      ref={this.fileInput}
-                      onChange={e => this.handleSelectFile(e)}
-                      accept="image/*"
-                      id="fileInput"
-                    />
-                    {fileSelected ? (
-                      <div> RESET IMAGE </div>
-                    ) : (
-                      <div> SELECT AN IMAGE </div>
-                    )}
-                  </Button>
+      <ViewerContext.Consumer>
+        {({ loading, viewer }) => {
+          if (loading) return <FullScreenLoader />;
+          return (
+            <Mutation
+              // refetchQueries={() => [
+              //   { query: ALL_ITEMS_QUERY, variables: { id: viewer.id } }
+              // ]}
+              mutation={ADD_ITEM_MUTATION}
+            >
+              {addItem => (
+                <Form
+                  onSubmit={async values => {
+                    addItem({
+                      variables: {
+                        item: { ...values, tags: this.applyTags(tags) }
+                      }
+                    });
+                    resetItem();
+                  }}
+                  render={({ handleSubmit, pristine, invalid, form }) => {
+                    return (
+                      <div>
+                        <Typography
+                          variant="display3"
+                          className={classes.typography}
+                          gutterBottom
+                        >
+                          Share. <br /> Borrow. <br /> Prosper.
+                        </Typography>
+                        <Button
+                          onClick={
+                            fileSelected
+                              ? this.resetFileInput
+                              : this.triggerClick
+                          }
+                          variant="contained"
+                          className={
+                            fileSelected ? classes.selected : classes.unselected
+                          }
+                        >
+                          <input
+                            hidden
+                            type="file"
+                            ref={this.fileInput}
+                            onChange={e => this.handleSelectFile(e)}
+                            accept="image/*"
+                            id="fileInput"
+                          />
+                          {fileSelected ? (
+                            <div> RESET IMAGE </div>
+                          ) : (
+                            <div> SELECT AN IMAGE </div>
+                          )}
+                        </Button>
 
-                  <form onSubmit={handleSubmit}>
-                    <FormSpy
-                      subscription={{ values: true }}
-                      component={({ values }) => {
-                        if (values) {
-                          this.dispatchUpdate(values, tags, updateItem);
-                        }
-                        return '';
-                      }}
-                    />
-                    <Field
-                      name="title"
-                      render={({ input, meta }) => (
-                        <div>
-                          <TextField
+                        <form onSubmit={handleSubmit}>
+                          <FormSpy
+                            subscription={{ values: true }}
+                            component={({ values }) => {
+                              if (values) {
+                                this.dispatchUpdate(values, tags, updateItem);
+                              }
+                              return '';
+                            }}
+                          />
+                          <Field
                             name="title"
-                            className={classes.textInput}
-                            onChange={input.onChange}
-                            id="standard-name"
-                            margin="normal"
-                            placeholder="Name your item"
+                            render={({ input, meta }) => (
+                              <div>
+                                <TextField
+                                  name="title"
+                                  className={classes.textInput}
+                                  onChange={input.onChange}
+                                  id="standard-name"
+                                  margin="normal"
+                                />
+                                {meta.touched &&
+                                  meta.error && <span>{meta.error}</span>}
+                              </div>
+                            )}
                           />
-                          {meta.touched &&
-                            meta.error && <span>{meta.error}</span>}
-                        </div>
-                      )}
-                    />
-                    <Field
-                      name="description"
-                      className={classes.form}
-                      render={({ input, meta }) => (
-                        <div>
-                          <TextField
+                          <Field
                             name="description"
-                            className={classes.textInput}
-                            onChange={input.onChange}
-                            id="description"
-                            multiline
-                            rows="4"
-                            placeholder="Describe your item"
-                            margin="normal"
+                            className={classes.form}
+                            render={({ input, meta }) => (
+                              <div>
+                                <TextField
+                                  name="description"
+                                  className={classes.textInput}
+                                  onChange={input.onChange}
+                                  id="description"
+                                  multiline
+                                  rows="4"
+                                  margin="normal"
+                                />
+                                {meta.touched &&
+                                  meta.error && <span>{meta.error}</span>}
+                              </div>
+                            )}
                           />
-                          {meta.touched &&
-                            meta.error && <span>{meta.error}</span>}
-                        </div>
-                      )}
-                    />
-                    <FormControl className={classes.formControl}>
-                      <Field name="tags">
-                        {({ input, meta }) => {
-                          return (
-                            <Select
-                              multiple
-                              value={selectedTags}
-                              onChange={e => this.handleSelectTag(e)}
-                              className={classes.textInput}
-                              placeholder="Add some tags"
-                              renderValue={selected => {
-                                return this.generateTagsText(tags, selected);
+                          <FormControl className={classes.formControl}>
+                            <Field name="tags">
+                              {({ input, meta }) => {
+                                return (
+                                  <Select
+                                    multiple
+                                    value={selectedTags}
+                                    onChange={e => this.handleSelectTag(e)}
+                                    className={classes.textInput}
+                                    placeholder="Add some tags"
+                                    renderValue={selected => {
+                                      return this.generateTagsText(
+                                        tags,
+                                        selected
+                                      );
+                                    }}
+                                  >
+                                    {tags &&
+                                      tags.map(tag => (
+                                        <MenuItem key={tag.id} value={tag.id}>
+                                          <Checkbox
+                                            checked={
+                                              selectedTags.indexOf(tag.id) > -1
+                                            }
+                                          />
+                                          <ListItemText primary={tag.title} />
+                                        </MenuItem>
+                                      ))}
+                                  </Select>
+                                );
                               }}
-                            >
-                              {tags &&
-                                tags.map(tag => (
-                                  <MenuItem key={tag.id} value={tag.id}>
-                                    <Checkbox
-                                      checked={
-                                        selectedTags.indexOf(tag.id) > -1
-                                      }
-                                    />
-                                    <ListItemText primary={tag.title} />
-                                  </MenuItem>
-                                ))}
-                            </Select>
-                          );
-                        }}
-                      </Field>
-                    </FormControl>
+                            </Field>
+                          </FormControl>
 
-                    <Button
-                      type="submit"
-                      disabled={pristine || invalid}
-                      className={classes.shareButton}
-                    >
-                      Share
-                    </Button>
-                  </form>
-                </div>
-              );
-            }}
-          />
-        )}
-      </Mutation>
+                          <Button
+                            type="submit"
+                            disabled={pristine || invalid}
+                            className={classes.shareButton}
+                          >
+                            Share
+                          </Button>
+                        </form>
+                      </div>
+                    );
+                  }}
+                />
+              )}
+            </Mutation>
+          );
+        }}
+      </ViewerContext.Consumer>
     );
   }
 }
