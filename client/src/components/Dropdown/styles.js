@@ -25,7 +25,9 @@ const styles = theme => ({
     height: 45
   },
 
-  menuButton: {}
+  i: {
+    marginRight: 10
+  }
 });
 
 export default styles;
