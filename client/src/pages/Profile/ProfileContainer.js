@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Profile from './Profile';
 import { withStyles } from '@material-ui/core/styles';
 import styles from './styles';
@@ -8,8 +8,6 @@ import { ALL_USER_ITEMS_QUERY } from '../../apollo/queries';
 import { ViewerContext } from '../../context/ViewerProvider';
 
 const ProfileContainer = ({ match }) => {
-  console.log(match);
-
   if (!match.params.userId) {
     return (
       <ViewerContext.Consumer>
@@ -27,7 +25,7 @@ const ProfileContainer = ({ match }) => {
               }}
             </Query>
           );
-        }};
+        }}
       </ViewerContext.Consumer>
     );
   } else {

@@ -8,15 +8,11 @@ import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import logo from '../../images/boomtown.svg';
-// import Icon from '@material-ui/core/Icon';
 import Button from '@material-ui/core/Button';
-// import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import { Link } from 'react-router-dom';
-// import { Typography } from '@material-ui/core';
 import MenuItem from '@material-ui/core/MenuItem';
 import Dropdown from '../Dropdown';
-
 import { graphql, compose } from 'react-apollo';
 import { LOGOUT_MUTATION, VIEWER_QUERY } from '../../apollo/queries';
 
@@ -43,46 +39,6 @@ function ButtonAppBar(props) {
             </Button>
           </Link>
           <Dropdown />
-          {/* <IconButton
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="Menu"
-          >
-            <MoreVertIcon />
-          </IconButton> */}
-
-          {/* <div>
-            <IconButton
-              aria-label="More"
-              aria-owns={open ? 'long-menu' : undefined}
-              aria-haspopup="true"
-              onClick={this.handleClick}
-            >
-              <MoreVertIcon />
-            </IconButton>
-            <Menu
-              id="long-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={this.handleClose}
-              PaperProps={{
-                style: {
-                  maxHeight: ITEM_HEIGHT * 4.5,
-                  width: 200
-                }
-              }}
-            >
-              {options.map(option => (
-                <MenuItem
-                  key={option}
-                  selected={option === 'Pyxis'}
-                  onClick={this.handleClose}
-                >
-                  {option}
-                </MenuItem>
-              ))}
-            </Menu>
-          </div> */}
         </Toolbar>
       </AppBar>
     </div>

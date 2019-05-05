@@ -1,7 +1,7 @@
 import React from 'react';
 import { withStyles, Typography } from '@material-ui/core';
 import styles from './styles';
-import { Grid, Paper } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import ItemsGrid from '../../components/ItemsGrid';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';

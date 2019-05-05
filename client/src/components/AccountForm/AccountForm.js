@@ -35,7 +35,6 @@ class AccountForm extends Component {
         onSubmit={values => {
           this.setState.error = null;
           const user = { variables: { user: values } };
-          console.log(user);
           this.state.formToggle
             ? loginMutation(user).catch(error => this.setState({ error }))
             : signupMutation(user).catch(error => this.setState({ error }));
