@@ -31,7 +31,10 @@ const Profile = ({ classes, user }) => {
           </Card>
         </Grid>
 
-        <Typography> Shared Items </Typography>
+        <Typography variant="headline" className="classes.header">
+          {' '}
+          Shared Items:{' '}
+        </Typography>
         <Grid item xs={12}>
           <Grid container justify="center">
             <ItemsGrid items={user.items} />
