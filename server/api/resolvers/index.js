@@ -1,24 +1,11 @@
 //jshint esversion:6
 
 const { ApolloError } = require('apollo-server-express');
-
-// @TODO: Uncomment these lines later when we add auth
 const jwt = require('jsonwebtoken');
 
 //takes everything from auth.js file
 const authMutations = require('./auth');
-
 const { DateScalar } = require('../custom-types');
-
-module.exports = app => {
-  // authMutations = {
-  //   signup: () => {},
-  //   login: () => {},
-  //   logout: () => {}
-  // }
-};
-
-// const authMutations = AuthMutationsFunction(app);
 
 module.exports = app => {
   return {
@@ -117,11 +104,9 @@ module.exports = app => {
       //authMutations gets loaded.
       ...authMutations(app),
 
-      //STRETCH GOAL : Try to addItem
+
       async addItem(parent, { item }, context, info) {
         try {
-          //user placeholder
-          // const user = { id: '5' };
 
           const user = context.token.id;
           const addedItem = await context.pgResource.saveNewItem({
@@ -132,8 +117,22 @@ module.exports = app => {
         } catch (e) {
           throw new ApolloError(e);
         }
+      },
+
+      async borrowItem(parent, { item }, context, info) {
+        try {
+          const user = context.token.id;
+          const borrowingItem = await context.pgResource.updateItemBorrower({
+            item: item,
+            user
+          });
+          return borrowingItem;
+        } catch (e) {
+          throw new ApolloError(e);
+        }
       }
 
+//adding image to new item. Leaving here as future stretch goal. 
       // image = await image;
       // const user = await jwt.decode(context.token, app.get('JWT_SECRET'));
       // const newItem = await context.pgResource.saveNewItem({

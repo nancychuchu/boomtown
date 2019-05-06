@@ -114,3 +114,18 @@ export const LOGIN_MUTATION = gql`
     }
   }
 `;
+export const BORROW_ITEM_MUTATION = gql`
+  mutation borrowItem($item: BorrowInput!) {
+    borrowItem(item: $item) {
+      id
+    }
+  }
+`;
+
+// export const BORROW_MUTATION = gql`
+//   mutation borrow($user: LoginInput!) {
+//     borrow(){
+//       id
+//     }
+//   }
+// `;

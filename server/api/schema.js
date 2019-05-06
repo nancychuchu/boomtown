@@ -77,8 +77,14 @@ module.exports = gql`
     password: String!
   }
 
+  input BorrowInput{
+    id: ID!
+    borrower: ID!
+  }
+
   type Mutation {
     addItem(item: NewItemInput!): Item
+    borrowItem(item: BorrowInput!): Item
     login(user: LoginInput!): User!
     logout: Boolean!
     signup(user: SignupInput!): User!

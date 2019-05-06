@@ -135,24 +135,6 @@ module.exports = postgres => {
     },
 
     async saveNewItem({ item, user }) {
-      /**
-       *  @TODO: Adding a New Item
-       *
-       *  Adding a new Item to Posgtres is the most advanced query.
-       *  It requires 3 separate INSERT statements.
-       *
-       *  All of the INSERT statements must:
-       *  1) Proceed in a specific order.
-       *  2) Succeed for the new Item to be considered added
-       *  3) If any of the INSERT queries fail, any successful INSERT
-       *     queries should be 'rolled back' to avoid 'orphan' data in the database.
-       *
-       *  To achieve #3 we'll ue something called a Postgres Transaction!
-       *  The code for the transaction has been provided for you, along with
-       *  helpful comments to help you get started.
-       *
-       *  Read the method and the comments carefully before you begin.
-       */
 
       return new Promise((resolve, reject) => {
         /**
@@ -194,7 +176,6 @@ module.exports = postgres => {
                 }
                 // release the client back to the pool
                 done();
-                // Uncomment this resolve statement when you're ready!
                 resolve(newItem.rows[0]);
                 // -------------------------------
               });
@@ -215,6 +196,71 @@ module.exports = postgres => {
           }
         });
       });
+    },
+
+    // async updateItemBorrower({item, user}) {
+    //   const { id } = item;
+    //   console.log(id);
+    //   console.log(user);
+    //   const updateBorrowerQuery = {
+    //       text:
+    //         'UPDATE items SET borrower = $1 WHERE id = $2',
+    //       values: [user, id]
+    //     };
+    //   try {
+    //     const items = await postgres.query(updateBorrowerQuery);
+    //     return items.rows;
+    //   } catch (e) {
+    //     throw 'Error updating borrower for item';
+    //   }
+    // },
+
+    async updateItemBorrower({ item, user }) {
+
+      return new Promise((resolve, reject) => {
+        postgres.connect((err, client, done) => {
+          try {
+            // Begin postgres transaction
+            client.query('BEGIN', async err => {
+              const { id } = item;
+
+              const updateBorrowerQuery = {
+                text:
+                  'UPDATE items SET borrower = $1 WHERE id = $2',
+                values: [user, id]
+              };
+
+              const updatedBorrower = await postgres.query(updateBorrowerQuery);  
+              console.log(updatedBorrower);
+
+              client.query('COMMIT', err => {
+                if (err) {
+                  throw err;
+                }
+                // release the client back to the pool
+                done();
+                resolve(updatedBorrower.rows[0]);
+                // -------------------------------
+              });
+            })       
+
+          } catch (e) {
+           
+            client.query('ROLLBACK', err => {
+              if (err) {
+                throw err;
+              }
+              // release the client back to the pool
+              done();
+            });
+            switch (true) {
+              default:
+                throw e;
+            }
+          }
+        });
+      });
     }
+
   };
 };
