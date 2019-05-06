@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Field, FormSpy } from 'react-final-form';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import styles from './styles';
 import {
   TextField,
@@ -36,7 +37,7 @@ function Transition(props) {
   return <Slide direction="up" {...props} />;
 }
 
-class ShareForm extends Component {
+class ShareItemForm extends Component {
   constructor(props) {
     super(props);
     this.fileInput = React.createRef();
@@ -123,11 +124,15 @@ class ShareForm extends Component {
     updateItem({
       itemowner: {
         fullname: viewer.fullname,
-        email: viewer.id
+        email: viewer.email,
+        id: viewer.id
       },
       ...values,
       tags: this.applyTags(tags)
     });
+  }
+  dispatchResetItem() {
+    resetItem();
   }
 
   saveItem = async (values, tags, addItem) => {
@@ -170,6 +175,7 @@ class ShareForm extends Component {
                     this.saveItem(values, tags, addItem);
                     // this.props.history.push('/items');
                   }}
+                  id="shareForm"
                   // validate={validate}
                   render={({ handleSubmit, pristine, invalid, form }) => {
                     return (
@@ -322,15 +328,24 @@ class ShareForm extends Component {
                               </DialogContentText>
                             </DialogContent>
                             <DialogActions>
-                              <Button
-                                onClick={
-                                  () => resetItem()
-                                  // this.handleClose;
-                                }
-                                color="primary"
-                              >
-                                ADD ANOTHER ITEM
-                              </Button>
+                              <a href="/share">
+                                <Button
+                                  onClick={
+                                    () => {
+                                      // form.reset();
+                                      // resetItem();
+                                      this.handleClose();
+                                    }
+
+                                    // this.dispatchResetItem()
+                                    // this.handleClose;
+                                  }
+                                  color="primary"
+                                >
+                                  ADD ANOTHER ITEM
+                                </Button>
+                              </a>
+
                               <Link to="/items">
                                 <Button
                                   onClick={this.handleClose}
@@ -355,6 +370,14 @@ class ShareForm extends Component {
   }
 }
 
+ShareItemForm.propTypes = {
+  classes: PropTypes.object.isRequired,
+  tags: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string.isRequired)),
+  updateItem: PropTypes.func.isRequired,
+  resetItem: PropTypes.func.isRequired,
+  resetImage: PropTypes.func.isRequired
+};
+
 const mapDispatchToProps = dispatch => ({
   updateItem(item) {
     dispatch(updateItem(item));
@@ -363,6 +386,8 @@ const mapDispatchToProps = dispatch => ({
     dispatch(resetImage());
   },
   resetItem() {
+    // const form = document.getElementById('shareForm');
+    // form.reset();
     dispatch(resetItem());
   }
 });
@@ -371,4 +396,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   null,
   mapDispatchToProps
-)(withRouter(withStyles(styles)(ShareForm)));
+)(withRouter(withStyles(styles)(ShareItemForm)));

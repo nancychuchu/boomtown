@@ -26,7 +26,8 @@ const initialState = {
     'https://via.placeholder.com/350x250.png?text=Please+select+an+image',
   itemowner: {
     fullname: 'Username',
-    email: 'dummy@email.com'
+    email: 'dummy@email.com',
+    id: null
   },
   created: new Date()
 };
