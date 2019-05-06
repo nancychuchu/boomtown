@@ -275,7 +275,10 @@ class ShareItemForm extends Component {
                                   <Select
                                     multiple
                                     value={selectedTags}
-                                    onChange={e => this.handleSelectTag(e)}
+                                    onChange={e => {
+                                      input.onChange(e);
+                                      this.handleSelectTag(e);
+                                    }}
                                     className={classes.textInput}
                                     label="Add some tags"
                                     renderValue={selected => {

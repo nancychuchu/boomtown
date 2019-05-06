@@ -135,7 +135,6 @@ module.exports = postgres => {
     },
 
     async saveNewItem({ item, user }) {
-
       return new Promise((resolve, reject) => {
         /**
          * Begin transaction by opening a long-lived connection
@@ -198,69 +197,20 @@ module.exports = postgres => {
       });
     },
 
-    // async updateItemBorrower({item, user}) {
-    //   const { id } = item;
-    //   console.log(id);
-    //   console.log(user);
-    //   const updateBorrowerQuery = {
-    //       text:
-    //         'UPDATE items SET borrower = $1 WHERE id = $2',
-    //       values: [user, id]
-    //     };
-    //   try {
-    //     const items = await postgres.query(updateBorrowerQuery);
-    //     return items.rows;
-    //   } catch (e) {
-    //     throw 'Error updating borrower for item';
-    //   }
-    // },
-
     async updateItemBorrower({ item, user }) {
-
-      return new Promise((resolve, reject) => {
-        postgres.connect((err, client, done) => {
-          try {
-            // Begin postgres transaction
-            client.query('BEGIN', async err => {
-              const { id } = item;
-
-              const updateBorrowerQuery = {
-                text:
-                  'UPDATE items SET borrower = $1 WHERE id = $2',
-                values: [user, id]
-              };
-
-              const updatedBorrower = await postgres.query(updateBorrowerQuery);  
-              console.log(updatedBorrower);
-
-              client.query('COMMIT', err => {
-                if (err) {
-                  throw err;
-                }
-                // release the client back to the pool
-                done();
-                resolve(updatedBorrower.rows[0]);
-                // -------------------------------
-              });
-            })       
-
-          } catch (e) {
-           
-            client.query('ROLLBACK', err => {
-              if (err) {
-                throw err;
-              }
-              // release the client back to the pool
-              done();
-            });
-            switch (true) {
-              default:
-                throw e;
-            }
-          }
-        });
-      });
+      const { id } = item;
+      console.log(id);
+      console.log(user);
+      const updateBorrowerQuery = {
+        text: 'UPDATE items SET borrower = $1 WHERE id = $2 RETURNING *',
+        values: [user, id]
+      };
+      try {
+        const items = await postgres.query(updateBorrowerQuery);
+        return items.rows;
+      } catch (e) {
+        throw 'Error updating borrower for item';
+      }
     }
-
   };
 };

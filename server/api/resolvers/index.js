@@ -104,10 +104,8 @@ module.exports = app => {
       //authMutations gets loaded.
       ...authMutations(app),
 
-
       async addItem(parent, { item }, context, info) {
         try {
-
           const user = context.token.id;
           const addedItem = await context.pgResource.saveNewItem({
             item: item,
@@ -122,17 +120,17 @@ module.exports = app => {
       async borrowItem(parent, { item }, context, info) {
         try {
           const user = context.token.id;
-          const borrowingItem = await context.pgResource.updateItemBorrower({
+          const borrowedItem = await context.pgResource.updateItemBorrower({
             item: item,
             user
           });
-          return borrowingItem;
+          return borrowedItem;
         } catch (e) {
           throw new ApolloError(e);
         }
       }
 
-//adding image to new item. Leaving here as future stretch goal. 
+      //adding image to new item. Leaving here as future stretch goal.
       // image = await image;
       // const user = await jwt.decode(context.token, app.get('JWT_SECRET'));
       // const newItem = await context.pgResource.saveNewItem({

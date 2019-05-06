@@ -79,6 +79,15 @@ export const ADD_ITEM_MUTATION = gql`
   }
 `;
 
+//Strech goal
+export const BORROW_ITEM_MUTATION = gql`
+  mutation borrowItem($item: BorrowInput!) {
+    borrowItem(item: $item) {
+      id
+    }
+  }
+`;
+
 /**
  * Auth-related queries and mutations.
  */
@@ -114,18 +123,3 @@ export const LOGIN_MUTATION = gql`
     }
   }
 `;
-export const BORROW_ITEM_MUTATION = gql`
-  mutation borrowItem($item: BorrowInput!) {
-    borrowItem(item: $item) {
-      id
-    }
-  }
-`;
-
-// export const BORROW_MUTATION = gql`
-//   mutation borrow($user: LoginInput!) {
-//     borrow(){
-//       id
-//     }
-//   }
-// `;

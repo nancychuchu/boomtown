@@ -55,7 +55,6 @@ class Dropdown extends React.Component {
         >
           <Link to="profile">
             <MenuItem key={ProfileContainer} onClick={this.handleClose}>
-              {/* <i className="fas fa-id-card fa-fw" /> Profile */}
               <Fingerprint className={classes.icon} /> Profile
             </MenuItem>
           </Link>
@@ -63,7 +62,6 @@ class Dropdown extends React.Component {
           <Mutation mutation={LOGOUT_MUTATION}>
             {logout => (
               <MenuItem onClick={logoutMutation}>
-                {/* <i className="fas fa-sign-out-alt" /> Logout */}
                 <PowerSettingsNew className={classes.icon} /> Logout
               </MenuItem>
             )}

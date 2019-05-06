@@ -11,50 +11,66 @@ import Typography from '@material-ui/core/Typography';
 import Gravatar from 'react-gravatar';
 import Moment from 'moment';
 import { Link } from 'react-router-dom';
+import { BORROW_ITEM_MUTATION } from '../../apollo/queries';
+import { ViewerContext } from '../../context/ViewerProvider';
+import { Mutation, graphql, compose } from 'react-apollo';
+import FullScreenLoader from '../FullScreenLoader';
 
-const ItemCard = ({ classes, item }) => {
+const ItemCard = ({ classes, item, borrowMutation }) => {
   const dateFrom = Moment(item.created).fromNow();
   return (
-    <Card className={classes.card}>
-      <CardMedia className={classes.media} image={item.imageurl} />
+    <ViewerContext.Consumer>
+      {({ loading, viewer }) => {
+        if (loading) return <FullScreenLoader />;
+        return (
+          <Card className={classes.card}>
+            <CardMedia className={classes.media} image={item.imageurl} />
 
-      <CardContent className={classes.mainContainer}>
-        <Link to={`/profile/${item.itemowner.id}`}>
-          <CardContent className={classes.ownerSection}>
-            <Gravatar
-              className={classes.gravatar}
-              email={item.itemowner.email}
-            />
+            <CardContent className={classes.mainContainer}>
+              <Link to={`/profile/${item.itemowner.id}`}>
+                <CardContent className={classes.ownerSection}>
+                  <Gravatar
+                    className={classes.gravatar}
+                    email={item.itemowner.email}
+                  />
 
-            <CardContent className={classes.ownerInfo}>
-              <Typography>{item.itemowner.fullname}</Typography>
-              <Typography variant="caption">{dateFrom}</Typography>
+                  <CardContent className={classes.ownerInfo}>
+                    <Typography>{item.itemowner.fullname}</Typography>
+                    <Typography variant="caption">{dateFrom}</Typography>
+                  </CardContent>
+                </CardContent>
+              </Link>
+
+              <Typography gutterBottom variant="headline" component="h2">
+                {item.title}
+              </Typography>
+
+              <Typography variant="caption" className={classes.tags}>
+                {item.tags.map(tag => tag.title).join(', ')}
+              </Typography>
+
+              <Typography component="p">{item.description}</Typography>
             </CardContent>
-          </CardContent>
-        </Link>
 
-        <Typography gutterBottom variant="headline" component="h2">
-          {item.title}
-        </Typography>
-
-        <Typography variant="caption" className={classes.tags}>
-          {item.tags.map(tag => tag.title).join(', ')}
-        </Typography>
-
-        <Typography component="p">{item.description}</Typography>
-      </CardContent>
-
-      <CardActions>
-        <Button
-          className={classes.button}
-          variant="outlined"
-          size="small"
-          color="primary"
-        >
-          Borrow
-        </Button>
-      </CardActions>
-    </Card>
+            <CardActions>
+              <Mutation mutation={BORROW_ITEM_MUTATION}>
+                {borrow => (
+                  <Button
+                    className={classes.button}
+                    variant="outlined"
+                    size="small"
+                    color="primary"
+                    onClick={() => borrowMutation(item.id)}
+                  >
+                    Borrow
+                  </Button>
+                )}
+              </Mutation>
+            </CardActions>
+          </Card>
+        );
+      }}
+    </ViewerContext.Consumer>
   );
 };
 
@@ -83,4 +99,10 @@ ItemCard.defaultProps = {
     created: '2019-04-29'
   }
 };
-export default withStyles(styles)(ItemCard);
+
+export default compose(
+  graphql(BORROW_ITEM_MUTATION, {
+    name: 'borrowMutation'
+  }),
+  withStyles(styles)
+)(ItemCard);

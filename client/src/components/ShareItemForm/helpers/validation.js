@@ -1,4 +1,4 @@
-export default function validate(values, selectedTags) {
+export default function validate(values) {
   const errors = {};
 
   if (!values.title) {
@@ -8,8 +8,8 @@ export default function validate(values, selectedTags) {
   if (!values.description || values.description === '') {
     errors.description = 'Please describe your item.';
   }
-  // || values.description === ''
-  if (!selectedTags || selectedTags.length < 1) {
+
+  if (!values.tags || values.tags.length < 1) {
     errors.tags = 'Please add at least one tag';
   }
   return errors;

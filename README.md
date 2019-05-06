@@ -6,6 +6,7 @@ This webapp is a platform that allows users to upload items and view other membe
 
 ## Screenshots
 
+![Image of Welcome Page](https://github.com/nancychuchu/boomtown/blob/master/client/public/welcomepage.jpg)
 ![Image of Boomtown Items Page](https://github.com/nancychuchu/boomtown/blob/master/client/public/itemspage.jpg)
 ![Image of Boomtown Share Page](https://github.com/nancychuchu/boomtown/blob/master/client/public/sharepage.jpg)
 

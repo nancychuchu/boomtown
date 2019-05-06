@@ -16,7 +16,7 @@ import {
 } from '../../apollo/queries';
 import { graphql, compose } from 'react-apollo';
 import validate from './helpers/validation';
-
+import PropTypes from 'prop-types';
 import styles from './styles';
 
 class AccountForm extends Component {
@@ -148,9 +148,15 @@ class AccountForm extends Component {
   }
 }
 
-const refetchQueries = [{ query: VIEWER_QUERY }];
+AccountForm.propTypes = {
+  classes: PropTypes.object.isRequired,
+  loginMutation: PropTypes.func.isRequired,
+  signupMutation: PropTypes.func.isRequired
+};
 
 // VIEWER_QUERY reloads the app and access authenticated routes
+const refetchQueries = [{ query: VIEWER_QUERY }];
+
 export default compose(
   graphql(SIGNUP_MUTATION, {
     options: { refetchQueries },
@@ -162,4 +168,3 @@ export default compose(
   }),
   withStyles(styles)
 )(AccountForm);
-// @TODO: Refetch the VIEWER_QUERY to reload the app and access authenticated routes.

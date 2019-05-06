@@ -21,7 +21,7 @@ const Profile = ({ classes, user }) => {
                 </CardContent>
               </CardContent>
 
-              <Typography gutterBottom variant="headline" component="h2">
+              <Typography gutterBottom variant="headline" component="h1">
                 {user.items.length} items shared {user.borrowed.length} items
                 Borrowed.
               </Typography>
