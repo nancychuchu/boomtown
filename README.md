@@ -4,7 +4,10 @@
 
 This webapp is a platform that allows users to upload items and view other members' items to loan and borrow them, thus encouraging a share economy.
 
-## ![Image of Boomtown](https://github.com/nancychuchu)
+## Screenshots
+
+![Image of Boomtown Items Page](https://github.com/nancychuchu/boomtown/blob/master/client/public/itemspage.jpg)
+![Image of Boomtown Share Page](https://github.com/nancychuchu/boomtown/blob/master/client/public/sharepage.jpg)
 
 ## Server
 

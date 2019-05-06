@@ -8,7 +8,10 @@ const { AuthDirective } = require('../api/custom-directives');
 const typeDefs = require('../api/schema'); //type definitiions fancy desig for schema
 let resolvers = require('../api/resolvers');
 
-module.exports = ({ app, pgResource }) => {
+module.exports = ({
+  app,
+  pgResource
+}) => {
   resolvers = resolvers(app);
 
   const schema = makeExecutableSchema({
