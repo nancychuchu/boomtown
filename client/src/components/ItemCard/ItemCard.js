@@ -1,5 +1,6 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core';
+import PropTypes from 'prop-types';
 import styles from './styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -55,6 +56,11 @@ const ItemCard = ({ classes, item }) => {
       </CardActions>
     </Card>
   );
+};
+
+ItemCard.propTypes = {
+  classes: PropTypes.object.isRequired,
+  item: PropTypes.object.isRequired
 };
 
 ItemCard.defaultProps = {

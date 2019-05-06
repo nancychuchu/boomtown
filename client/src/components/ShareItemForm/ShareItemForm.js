@@ -12,7 +12,8 @@ import {
   Checkbox,
   Typography,
   Button,
-  withStyles
+  withStyles,
+  InputLabel
 } from '@material-ui/core';
 import {
   updateItem,
@@ -131,9 +132,6 @@ class ShareItemForm extends Component {
       tags: this.applyTags(tags)
     });
   }
-  dispatchResetItem() {
-    resetItem();
-  }
 
   saveItem = async (values, tags, addItem) => {
     try {
@@ -173,10 +171,8 @@ class ShareItemForm extends Component {
                 <Form
                   onSubmit={values => {
                     this.saveItem(values, tags, addItem);
-                    // this.props.history.push('/items');
                   }}
-                  id="shareForm"
-                  // validate={validate}
+                  validate={validate}
                   render={({ handleSubmit, pristine, invalid, form }) => {
                     return (
                       <div>
@@ -240,6 +236,7 @@ class ShareItemForm extends Component {
                                   id="standard-name"
                                   margin="normal"
                                   placeholder="Name your item"
+                                  autoComplete="off"
                                 />
                                 {meta.touched &&
                                   meta.error && <span>{meta.error}</span>}
@@ -260,22 +257,27 @@ class ShareItemForm extends Component {
                                   rows="4"
                                   margin="normal"
                                   placeholder="Describe your item"
+                                  autoComplete="off"
                                 />
                                 {meta.touched &&
                                   meta.error && <span>{meta.error}</span>}
                               </div>
                             )}
                           />
-                          <FormControl className={classes.formControl}>
-                            <Field name="tags">
-                              {({ input, meta }) => {
-                                return (
+
+                          <Field name="tags">
+                            {({ input, meta }) => {
+                              return (
+                                <FormControl className={classes.formControl}>
+                                  <InputLabel htmlFor="select-multiple-checkbox">
+                                    Add Some Tags
+                                  </InputLabel>
                                   <Select
                                     multiple
                                     value={selectedTags}
                                     onChange={e => this.handleSelectTag(e)}
                                     className={classes.textInput}
-                                    placeholder="Add some tags"
+                                    label="Add some tags"
                                     renderValue={selected => {
                                       return this.generateTagsText(
                                         tags,
@@ -295,13 +297,15 @@ class ShareItemForm extends Component {
                                         </MenuItem>
                                       ))}
                                   </Select>
-                                );
-                              }}
-                            </Field>
-                          </FormControl>
+                                </FormControl>
+                              );
+                            }}
+                          </Field>
 
                           <Button
                             type="submit"
+                            variant="contained"
+                            color="primary"
                             disabled={pristine || invalid}
                             className={classes.shareButton}
                             onClick={this.handleClickOpen}
@@ -328,23 +332,18 @@ class ShareItemForm extends Component {
                               </DialogContentText>
                             </DialogContent>
                             <DialogActions>
-                              <a href="/share">
-                                <Button
-                                  onClick={
-                                    () => {
-                                      // form.reset();
-                                      // resetItem();
-                                      this.handleClose();
-                                    }
-
-                                    // this.dispatchResetItem()
-                                    // this.handleClose;
-                                  }
-                                  color="primary"
-                                >
-                                  ADD ANOTHER ITEM
-                                </Button>
-                              </a>
+                              {/* <a href="/share"> */}
+                              <Button
+                                onClick={() => {
+                                  form.reset();
+                                  this.handleClose();
+                                  resetItem();
+                                }}
+                                color="primary"
+                              >
+                                ADD ANOTHER ITEM
+                              </Button>
+                              {/* </a> */}
 
                               <Link to="/items">
                                 <Button
@@ -388,6 +387,7 @@ const mapDispatchToProps = dispatch => ({
   resetItem() {
     // const form = document.getElementById('shareForm');
     // form.reset();
+    console.log('yes');
     dispatch(resetItem());
   }
 });

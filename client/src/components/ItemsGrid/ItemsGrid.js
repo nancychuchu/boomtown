@@ -1,8 +1,8 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core';
+import { withStyles, Grid } from '@material-ui/core';
 import styles from './styles';
-import Grid from '@material-ui/core/Grid';
 import ItemCard from '../ItemCard';
+import PropTypes from 'prop-types';
 
 const ItemsGrid = ({ classes, items }) => {
   return (
@@ -14,6 +14,11 @@ const ItemsGrid = ({ classes, items }) => {
       </Grid>
     </Grid>
   );
+};
+
+ItemsGrid.propTypes = {
+  classes: PropTypes.object.isRequired,
+  items: PropTypes.array.isRequired
 };
 
 export default withStyles(styles)(ItemsGrid);

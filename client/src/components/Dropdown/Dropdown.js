@@ -4,15 +4,16 @@ import { withStyles } from '@material-ui/core/styles';
 import { Menu } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import MenuItem from '@material-ui/core/MenuItem';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import { MoreVert, Fingerprint, PowerSettingsNew } from '@material-ui/icons';
 import ProfileContainer from '../../pages/Profile';
 import styles from './styles';
 import { LOGOUT_MUTATION, VIEWER_QUERY } from '../../apollo/queries';
 import { Mutation, graphql, compose } from 'react-apollo';
+import PropTypes from 'prop-types';
 
 const ITEM_HEIGHT = 48;
 
-class LongMenu extends React.Component {
+class Dropdown extends React.Component {
   state = {
     anchorEl: null
   };
@@ -27,7 +28,7 @@ class LongMenu extends React.Component {
 
   render() {
     const { anchorEl } = this.state;
-    const { logoutMutation } = this.props;
+    const { classes, logoutMutation } = this.props;
     const open = Boolean(anchorEl);
 
     return (
@@ -38,7 +39,7 @@ class LongMenu extends React.Component {
           aria-haspopup="true"
           onClick={this.handleClick}
         >
-          <MoreVertIcon />
+          <MoreVert />
         </IconButton>
         <Menu
           id="long-menu"
@@ -54,14 +55,16 @@ class LongMenu extends React.Component {
         >
           <Link to="profile">
             <MenuItem key={ProfileContainer} onClick={this.handleClose}>
-              <i className="fas fa-id-card fa-fw" /> Profile
+              {/* <i className="fas fa-id-card fa-fw" /> Profile */}
+              <Fingerprint className={classes.icon} /> Profile
             </MenuItem>
           </Link>
 
           <Mutation mutation={LOGOUT_MUTATION}>
             {logout => (
               <MenuItem onClick={logoutMutation}>
-                <i className="fas fa-sign-out-alt" /> Logout
+                {/* <i className="fas fa-sign-out-alt" /> Logout */}
+                <PowerSettingsNew className={classes.icon} /> Logout
               </MenuItem>
             )}
           </Mutation>
@@ -70,6 +73,11 @@ class LongMenu extends React.Component {
     );
   }
 }
+
+Dropdown.propTypes = {
+  classes: PropTypes.object.isRequired
+};
+
 const refetchQueries = [{ query: VIEWER_QUERY }];
 
 export default compose(
@@ -78,4 +86,4 @@ export default compose(
     name: 'logoutMutation'
   }),
   withStyles(styles)
-)(LongMenu);
+)(Dropdown);

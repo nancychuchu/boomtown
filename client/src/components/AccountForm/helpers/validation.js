@@ -1,13 +1,17 @@
 export default function validate(values) {
   const errors = {};
-  if (!values.email) {
-    errors.email = 'Required';
+
+  if (!values.email || values.email === '') {
+    errors.email = 'Email is required';
   }
-  if (!values.password) {
-    errors.password = 'Required';
+  if (/.*@.*\..*/.test(values.email) === false) {
+    errors.email = 'Please enter a valid email address';
+  }
+  if (!values.password || values.password === '') {
+    errors.password = 'Password is required';
   }
   if (values.fullname && !values.fullname) {
-    errors.password = 'Required';
+    errors.password = 'Full name is required';
   }
   return errors;
 }

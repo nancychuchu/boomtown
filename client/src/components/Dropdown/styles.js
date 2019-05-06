@@ -25,8 +25,8 @@ const styles = theme => ({
     height: 45
   },
 
-  i: {
-    marginRight: 10
+  icon: {
+    marginRight: 30
   }
 });
 
