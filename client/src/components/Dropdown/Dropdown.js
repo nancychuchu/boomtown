@@ -27,7 +27,7 @@ class LongMenu extends React.Component {
 
   render() {
     const { anchorEl } = this.state;
-    const { classes, logoutMutation } = this.props;
+    const { logoutMutation } = this.props;
     const open = Boolean(anchorEl);
 
     return (

@@ -1,17 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router';
 import styles from './styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import {
+  AppBar,
+  Toolbar,
+  IconButton,
+  Button,
+  withStyles
+} from '@material-ui/core';
 import logo from '../../images/boomtown.svg';
-import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import { Link } from 'react-router-dom';
-import MenuItem from '@material-ui/core/MenuItem';
 import Dropdown from '../Dropdown';
 import { graphql, compose } from 'react-apollo';
 import { LOGOUT_MUTATION, VIEWER_QUERY } from '../../apollo/queries';

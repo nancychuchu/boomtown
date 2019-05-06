@@ -1,11 +1,9 @@
 import React from 'react';
 import ItemCard from '../ItemCard';
-// import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
 
 const ShareItemPreview = ({ shareItemPreview }) => {
-  console.log(shareItemPreview);
   return <ItemCard item={shareItemPreview} />;
 };
 

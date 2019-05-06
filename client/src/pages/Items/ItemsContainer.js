@@ -4,7 +4,6 @@ import { withStyles } from '@material-ui/core/styles';
 import styles from './styles';
 import FullScreenLoader from '../../components/FullScreenLoader';
 import { ALL_ITEMS_QUERY } from '../../apollo/queries';
-import { VIEWER_QUERY } from '../../apollo/queries';
 import { Query } from 'react-apollo';
 import { ViewerContext } from '../../context/ViewerProvider';
 

@@ -1,7 +1,6 @@
 const styles = theme => ({
   formControl: {
-    width: '100%',
-    paddingLeft: 50
+    width: '100%'
   },
 
   selected: {
@@ -17,6 +16,7 @@ const styles = theme => ({
   textInput: {
     width: '70%'
   },
+
   shareButton: {
     marginTop: 20
   }
