@@ -1,9 +1,6 @@
 import React from 'react';
-import IconButton from '@material-ui/core/IconButton';
-import { withStyles } from '@material-ui/core/styles';
-import { Menu } from '@material-ui/core';
+import { withStyles, Menu, MenuItem, IconButton } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import MenuItem from '@material-ui/core/MenuItem';
 import { MoreVert, Fingerprint, PowerSettingsNew } from '@material-ui/icons';
 import ProfileContainer from '../../pages/Profile';
 import styles from './styles';

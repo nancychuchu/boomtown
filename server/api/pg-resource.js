@@ -199,10 +199,8 @@ module.exports = postgres => {
 
     async updateItemBorrower({ item, user }) {
       const { id } = item;
-      console.log(id);
-      console.log(user);
       const updateBorrowerQuery = {
-        text: 'UPDATE items SET borrower = $1 WHERE id = $2 RETURNING *',
+        text: 'UPDATE items SET borrower = $1 WHERE id = $2',
         values: [user, id]
       };
       try {

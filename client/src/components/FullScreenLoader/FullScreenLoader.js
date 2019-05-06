@@ -11,7 +11,9 @@ function FullScreenLoader(props) {
     <div className={classes.root}>
       <div className={classes.container}>
         <CircularProgress color="primary" size={100} thickness={2} />{' '}
-        <Typography className={classes.quote}>Loading...</Typography>
+        <Typography className={classes.quote}>
+          Unleashing your internet's superpowers...
+        </Typography>
       </div>
     </div>
   );

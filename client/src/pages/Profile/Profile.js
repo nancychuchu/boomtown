@@ -1,11 +1,10 @@
 import React from 'react';
-import { withStyles, Typography } from '@material-ui/core';
+import { withStyles, Typography, Grid, Divider, Card } from '@material-ui/core';
 import styles from './styles';
-import { Grid } from '@material-ui/core';
 import ItemsGrid from '../../components/ItemsGrid';
-import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Gravatar from 'react-gravatar';
+import PropTypes from 'prop-types';
 
 const Profile = ({ classes, user }) => {
   return (
@@ -17,13 +16,13 @@ const Profile = ({ classes, user }) => {
               <CardContent className={classes.ownerSection}>
                 <Gravatar className={classes.gravatar} email={user.email} />
                 <CardContent className={classes.ownerInfo}>
-                  <Typography>{user.fullname}</Typography>
+                  <Typography variant="display1">{user.fullname}</Typography>
                 </CardContent>
               </CardContent>
 
               <Typography gutterBottom variant="headline" component="h1">
                 {user.items.length} items shared {user.borrowed.length} items
-                Borrowed.
+                borrowed.
               </Typography>
 
               <Typography component="p">{user.bio}</Typography>
@@ -31,7 +30,11 @@ const Profile = ({ classes, user }) => {
           </Card>
         </Grid>
 
-        <Typography variant="headline" className="classes.header">
+        <Typography
+          variant="display2"
+          className="classes.header"
+          color="primary"
+        >
           {' '}
           Shared Items:{' '}
         </Typography>
@@ -40,9 +43,31 @@ const Profile = ({ classes, user }) => {
             <ItemsGrid items={user.items} />
           </Grid>
         </Grid>
+
+        <Divider color="primary" />
+
+        <Typography
+          variant="display2"
+          className="classes.header"
+          color="primary"
+        >
+          {' '}
+          Borrowed Items:{' '}
+        </Typography>
+
+        <Grid item xs={12}>
+          <Grid container justify="center">
+            <ItemsGrid items={user.borrowed} />
+          </Grid>
+        </Grid>
       </Grid>
     </div>
   );
+};
+
+Profile.propTypes = {
+  classes: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(Profile);

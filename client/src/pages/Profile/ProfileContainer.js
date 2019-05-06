@@ -19,7 +19,6 @@ const ProfileContainer = ({ match }) => {
                 if (loading) return <FullScreenLoader />;
                 if (error) return `Error! ${error.message}`;
                 if (data) {
-                  console.log(data);
                   return <Profile user={data.user} />;
                 }
               }}
@@ -38,7 +37,6 @@ const ProfileContainer = ({ match }) => {
           if (loading) return <FullScreenLoader />;
           if (error) return `Error! ${error.message}`;
           if (data) {
-            console.log(data);
             return <Profile user={data.user} />;
           }
         }}

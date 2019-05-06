@@ -13,7 +13,13 @@ import {
   Typography,
   Button,
   withStyles,
-  InputLabel
+  InputLabel,
+  DialogActions,
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Slide
 } from '@material-ui/core';
 import {
   updateItem,
@@ -26,12 +32,6 @@ import { ViewerContext } from '../../context/ViewerProvider';
 import { withRouter } from 'react-router';
 import FullScreenLoader from '../../components/FullScreenLoader';
 import validate from './helpers/validation';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Slide from '@material-ui/core/Slide';
 import { Link } from 'react-router-dom';
 
 function Transition(props) {
@@ -114,7 +114,6 @@ class ShareItemForm extends Component {
   }
 
   dispatchUpdate(viewer, values, tags, updateItem) {
-    console.log(values);
     if (!values.imageurl && this.state.fileSelected) {
       this.getBase64Url().then(imageurl => {
         updateItem({
@@ -176,11 +175,7 @@ class ShareItemForm extends Component {
                   render={({ handleSubmit, pristine, invalid, form }) => {
                     return (
                       <div>
-                        <Typography
-                          variant="display3"
-                          className={classes.typography}
-                          gutterBottom
-                        >
+                        <Typography variant="display3" gutterBottom>
                           Share. <br /> Borrow. <br /> Prosper.
                         </Typography>
                         <Button
@@ -335,18 +330,18 @@ class ShareItemForm extends Component {
                               </DialogContentText>
                             </DialogContent>
                             <DialogActions>
-                              {/* <a href="/share"> */}
-                              <Button
-                                onClick={() => {
-                                  form.reset();
-                                  this.handleClose();
-                                  resetItem();
-                                }}
-                                color="primary"
-                              >
-                                ADD ANOTHER ITEM
-                              </Button>
-                              {/* </a> */}
+                              <a href="/share">
+                                <Button
+                                  onClick={() => {
+                                    form.reset();
+                                    this.handleClose();
+                                    resetItem();
+                                  }}
+                                  color="primary"
+                                >
+                                  ADD ANOTHER ITEM
+                                </Button>
+                              </a>
 
                               <Link to="/items">
                                 <Button
@@ -388,14 +383,10 @@ const mapDispatchToProps = dispatch => ({
     dispatch(resetImage());
   },
   resetItem() {
-    // const form = document.getElementById('shareForm');
-    // form.reset();
-    console.log('yes');
     dispatch(resetItem());
   }
 });
 
-//the first connect parameter is mapStateToProps. If you don't have it, use null.
 export default connect(
   null,
   mapDispatchToProps

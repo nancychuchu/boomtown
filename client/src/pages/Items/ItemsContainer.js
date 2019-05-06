@@ -19,7 +19,6 @@ class ItemsContainer extends Component {
                 if (loading) return <FullScreenLoader />;
                 if (error) return `Error! ${error.message}`;
                 if (data) {
-                  console.log(data);
                   return <Items items={data.items} />;
                 }
               }}

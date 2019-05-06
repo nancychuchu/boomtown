@@ -21,7 +21,6 @@ function generateToken(user, secret) {
 module.exports = app => {
   return {
     async signup(parent, args, context) {
-      console.log(args);
       const {} = args;
       try {
         // Use bcrypt to generate a cryptographic hash to conceal the user's password before storing it.
@@ -35,7 +34,6 @@ module.exports = app => {
 
         const encodedToken = generateToken(user, app.get('JWT_SECRET'));
 
-        console.log(`JWT: ${encodedToken}`);
         setCookie({
           tokenName: app.get('JWT_COOKIE_NAME'),
           token: encodedToken,
@@ -53,7 +51,6 @@ module.exports = app => {
     async login(parent, args, context) {
       //to match schema.
       const { email, password } = args.user;
-      // console.log(email, password);
 
       try {
         const user = await context.pgResource.getUserAndPasswordForVerification(

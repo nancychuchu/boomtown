@@ -8,7 +8,7 @@ const styles = theme => ({
     paddingTop: 64
   },
   card: {
-    height: 300,
+    height: 250,
     margin: 50
   },
   gravatar: {
