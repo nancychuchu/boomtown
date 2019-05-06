@@ -16,8 +16,11 @@ import Dropdown from '../Dropdown';
 import { graphql, compose } from 'react-apollo';
 import { LOGOUT_MUTATION, VIEWER_QUERY } from '../../apollo/queries';
 
-function ButtonAppBar(props) {
+function MenuBar(props) {
   const { classes } = props;
+
+  const endPoint = props.location.pathname;
+
   return (
     <div className={classes.root}>
       <AppBar position="fixed">
@@ -28,16 +31,19 @@ function ButtonAppBar(props) {
             </IconButton>
           </Link>
           <div className={classes.spacer} />
-          <Link to="/share">
-            <Button
-              variant="text"
-              className={classes.shareButton}
-              color="inherit"
-            >
-              <AddIcon className={classes.addIcon} />
-              SHARE SOMETHING
-            </Button>
-          </Link>
+          {endPoint !== '/share' && (
+            <Link to="/share">
+              <Button
+                variant="text"
+                className={classes.shareButton}
+                color="inherit"
+              >
+                <AddIcon className={classes.addIcon} />
+                SHARE SOMETHING
+              </Button>
+            </Link>
+          )}
+
           <Dropdown />
         </Toolbar>
       </AppBar>
@@ -45,7 +51,7 @@ function ButtonAppBar(props) {
   );
 }
 
-ButtonAppBar.propTypes = {
+MenuBar.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
@@ -58,5 +64,5 @@ export default withRouter(
       name: 'logoutMutation'
     }),
     withStyles(styles)
-  )(ButtonAppBar)
+  )(MenuBar)
 );

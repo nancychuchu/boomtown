@@ -3,7 +3,7 @@ import Home from '../pages/Home';
 import Profile from '../pages/Profile';
 import Share from '../pages/Share';
 import Items from '../pages/Items';
-import AppBar from '../components/AppBar';
+import MenuBar from '../components/MenuBar';
 import { Route, Switch, Redirect } from 'react-router';
 import { ViewerContext } from '../context/ViewerProvider';
 import FullScreenLoader from '../components/FullScreenLoader';
@@ -31,7 +31,7 @@ export default () => (
       }
       return (
         <Fragment>
-          <AppBar />
+          <MenuBar />
           <Switch>
             <Route exact path="/items" name="items" component={Items} />
             <Route exact path="/profile" name="profile" component={Profile} />

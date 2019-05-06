@@ -53,7 +53,7 @@ module.exports = app => {
     async login(parent, args, context) {
       //to match schema.
       const { email, password } = args.user;
-      console.log(email, password);
+      // console.log(email, password);
 
       try {
         const user = await context.pgResource.getUserAndPasswordForVerification(
