@@ -197,18 +197,39 @@ module.exports = postgres => {
       });
     },
 
-    async updateItemBorrower({ item, user }) {
-      const { id } = item;
+    // async borrowItem({ borrowerid, itemID }) {
+    //   const items = await postgres.query({
+    //     text: `UPDATE items SET borrowerid=$1 WHERE id=$2 AND borrowerid IS NULL RETURNING *;`,
+    //     values: [borrowerid, itemID]
+    //   })
+    //   if (items.rows.length < 1) {
+    //     throw new Error('This item is already being borrowed.')
+    //   }
+    //   return items.rows[0]
+    // },
+    async updateItemBorrower({ itemid, user }) {
       const updateBorrowerQuery = {
-        text: 'UPDATE items SET borrower = $1 WHERE id = $2',
-        values: [user, id]
+        text:
+          'UPDATE items SET borrower=$1 WHERE id=$2 AND borrower IS NULL RETURNING *;',
+        values: [user, itemid]
       };
-      try {
-        const items = await postgres.query(updateBorrowerQuery);
-        return items.rows;
-      } catch (e) {
-        throw 'Error updating borrower for item';
+
+      const items = await postgres.query(updateBorrowerQuery);
+      if (items.rows.length < 1) {
+        throw new Error('This item is already being borrowed.');
       }
+      return items.rows[0];
+
+      // try {
+      //   const items = await postgres.query(updateBorrowerQuery);
+      //   if (item.rows.length === 0) {
+      //     throw 'This item is already taken';
+      //   }
+      //   console.log(items.rows[0]);
+      //   return items.rows[0];
+      // } catch (e) {
+      //   throw 'Error updating borrower for item';
+      // }
     }
   };
 };

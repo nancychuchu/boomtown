@@ -8,15 +8,6 @@ import { Route, Switch, Redirect } from 'react-router';
 import { ViewerContext } from '../context/ViewerProvider';
 import FullScreenLoader from '../components/FullScreenLoader';
 
-// const Profile = ({ match }) => (
-//   <div>
-//     <Route
-//       path={`${match.url}/:userid`}
-//       render={({ match }) => <div> Profile page for {match.params.userid}</div>}
-//     />
-//   </div>
-// );
-
 export default () => (
   <ViewerContext.Consumer>
     {({ loading, viewer }) => {

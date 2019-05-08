@@ -81,7 +81,7 @@ export const ADD_ITEM_MUTATION = gql`
 
 //Stretch goal
 export const BORROW_ITEM_MUTATION = gql`
-  mutation borrowItem($item: BorrowInput!) {
+  mutation borrowItem($item: ID!) {
     borrowItem(item: $item) {
       id
     }

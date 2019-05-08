@@ -120,8 +120,10 @@ module.exports = app => {
       async borrowItem(parent, { item }, context, info) {
         try {
           const user = context.token.id;
+          console.log(user);
+          console.log(item);
           const borrowedItem = await context.pgResource.updateItemBorrower({
-            item: item,
+            itemid: item,
             user
           });
           return borrowedItem;
