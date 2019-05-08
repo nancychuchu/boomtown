@@ -120,8 +120,6 @@ module.exports = app => {
       async borrowItem(parent, { item }, context, info) {
         try {
           const user = context.token.id;
-          console.log(user);
-          console.log(item);
           const borrowedItem = await context.pgResource.updateItemBorrower({
             itemid: item,
             user
@@ -132,7 +130,8 @@ module.exports = app => {
         }
       }
 
-      //adding image to new item. Leaving here as future stretch goal.
+      //adding image to new item. *Leaving here as future stretch goal.*
+
       // image = await image;
       // const user = await jwt.decode(context.token, app.get('JWT_SECRET'));
       // const newItem = await context.pgResource.saveNewItem({

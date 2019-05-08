@@ -61,15 +61,15 @@ const ItemCard = ({ classes, item, borrowMutation }) => {
                     variant="outlined"
                     size="small"
                     color="primary"
-                    // onClick={() =>
-                    //   borrowMutation({
-                    //     variables: {
-                    //       item: item.id
-                    //     }
-                    //   }).catch(error => {
-                    //     throw Error(error);
-                    //   })
-                    // }
+                    onClick={() =>
+                      borrowMutation({
+                        variables: {
+                          item: item.id
+                        }
+                      }).catch(error => {
+                        throw Error(error);
+                      })
+                    }
                   >
                     Borrow
                   </Button>
