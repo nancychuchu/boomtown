@@ -49,22 +49,16 @@ module.exports = app => {
     },
 
     async login(parent, args, context) {
-      //to match schema.
       const { email, password } = args.user;
-
       try {
         const user = await context.pgResource.getUserAndPasswordForVerification(
           args.user.email
         );
-
-        //pass non encrypted password then the password from the user. Add await because compare is an async function.
+        if (!user) throw 'User was not found ';
         const valid = await bcrypt.compare(password, user.password);
 
-        // -------------------------------
-        if (!valid || !user) throw 'User / password combination was not found.';
-
+        if (!valid || !user) throw 'User /Password combination was not found.';
         const encodedToken = generateToken(user, app.get('JWT_SECRET'));
-
         setCookie({
           tokenName: app.get('JWT_COOKIE_NAME'),
           token: encodedToken,

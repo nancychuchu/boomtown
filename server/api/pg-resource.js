@@ -18,10 +18,6 @@ function tagsQueryString(tags, itemid, result) {
         );
 }
 
-// function tagsQueryString(tags, itemid, result){
-// tags.map(tag=>`(${tag.id'},${itemid})`).join(",")
-//   }
-
 module.exports = postgres => {
   return {
     async createUser({ fullname, email, password }) {
