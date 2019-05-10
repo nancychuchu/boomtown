@@ -1,6 +1,7 @@
 import React from 'react';
 import { Grid, Typography } from '@material-ui/core';
 import AccountForm from '../../components/AccountForm';
+import PropTypes from 'prop-types';
 
 const Home = ({ classes }) => {
   return (
@@ -31,6 +32,10 @@ const Home = ({ classes }) => {
       </Grid>
     </Grid>
   );
+};
+
+Home.propTypes = {
+  classes: PropTypes.object
 };
 
 export default Home;
