@@ -24,7 +24,8 @@ import Fade from '@material-ui/core/Fade';
 class ItemCard extends React.Component {
   state = {
     open: false,
-    message: 'Try again'
+    message: 'Try again',
+    error: null
   };
 
   handleClick = () => {
@@ -91,12 +92,11 @@ class ItemCard extends React.Component {
                             item: item.id
                           }
                         }).catch(error => {
-                          // throw Error(error);
-
                           this.setState({
                             open: true,
                             message:
-                              'Sorry, this item has already been borrowed! Try another item.'
+                              'Sorry, this item has already been borrowed! Try another item.',
+                            error: error
                           });
                         });
 
