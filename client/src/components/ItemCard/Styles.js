@@ -1,4 +1,4 @@
-const styles = {
+const styles = theme => ({
   card: {
     width: 400,
     height: 550,
@@ -34,7 +34,18 @@ const styles = {
     position: 'absolute',
     color: 'black',
     bottom: 20
+  },
+
+  success: {
+    backgroundColor: 'green'
+  },
+  error: {
+    backgroundColor: 'red'
+  },
+  message: {
+    display: 'flex',
+    alignItems: 'center'
   }
-};
+});
 
 export default styles;
