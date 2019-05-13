@@ -28,10 +28,6 @@ class ItemCard extends React.Component {
     error: null
   };
 
-  handleClick = () => {
-    this.setState({ open: true });
-  };
-
   handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -42,7 +38,7 @@ class ItemCard extends React.Component {
 
   render() {
     const { classes, item, borrowMutation } = this.props;
-    const { open, message } = this.state;
+    const { message } = this.state;
     const dateFrom = Moment(item.created).fromNow();
 
     return (
