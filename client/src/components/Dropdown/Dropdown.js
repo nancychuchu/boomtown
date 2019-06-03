@@ -50,7 +50,7 @@ class Dropdown extends React.Component {
             }
           }}
         >
-          <Link to="profile">
+          <Link to="/profile">
             <MenuItem key={ProfileContainer} onClick={this.handleClose}>
               <Fingerprint className={classes.icon} /> Profile
             </MenuItem>
@@ -70,7 +70,8 @@ class Dropdown extends React.Component {
 }
 
 Dropdown.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  logoutMutation: PropTypes.func.isRequired
 };
 
 const refetchQueries = [{ query: VIEWER_QUERY }];

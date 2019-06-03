@@ -343,14 +343,12 @@ class ShareItemForm extends Component {
                                 </Button>
                               </a>
 
-                              <Link to="/items">
-                                <Button
-                                  onClick={this.handleClose}
-                                  color="secondary"
-                                >
-                                  BACK TO ITEMS PAGE
-                                </Button>
-                              </Link>
+                              <Button
+                                onClick={this.handleClose}
+                                color="secondary"
+                              >
+                                <Link to="/items">BACK TO ITEMS PAGE</Link>
+                              </Button>
                             </DialogActions>
                           </Dialog>
                         </form>
