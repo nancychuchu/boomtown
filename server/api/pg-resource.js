@@ -143,7 +143,6 @@ module.exports = postgres => {
             client.query('BEGIN', async err => {
               const { title, description, tags } = item;
 
-              console.log(user);
               // Generate new Item query - Stretch Goal
               const newItemQuery = {
                 text:
