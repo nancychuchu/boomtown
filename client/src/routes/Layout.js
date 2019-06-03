@@ -25,7 +25,6 @@ export default () => (
           <MenuBar />
           <Switch>
             <Route exact path="/items" name="items" component={Items} />
-            <Route exact path="/profile" name="profile" component={Profile} />
             <Route
               exact
               path="/profile/:userId"

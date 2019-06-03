@@ -151,7 +151,6 @@ class ShareItemForm extends Component {
   render() {
     const { classes, tags, resetItem, updateItem } = this.props;
     const { selectedTags, fileSelected } = this.state;
-
     return (
       <ViewerContext.Consumer>
         {({ loading, viewer }) => {

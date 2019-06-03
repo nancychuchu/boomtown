@@ -7,6 +7,8 @@ import styles from './styles';
 import { LOGOUT_MUTATION, VIEWER_QUERY } from '../../apollo/queries';
 import { Mutation, graphql, compose } from 'react-apollo';
 import PropTypes from 'prop-types';
+import { ViewerContext } from '../../context/ViewerProvider';
+import FullScreenLoader from '../FullScreenLoader';
 
 const ITEM_HEIGHT = 48;
 
@@ -27,44 +29,50 @@ class Dropdown extends React.Component {
     const { anchorEl } = this.state;
     const { classes, logoutMutation } = this.props;
     const open = Boolean(anchorEl);
-
     return (
-      <div>
-        <IconButton
-          aria-label="More"
-          aria-owns={open ? 'long-menu' : undefined}
-          aria-haspopup="true"
-          onClick={this.handleClick}
-        >
-          <MoreVert />
-        </IconButton>
-        <Menu
-          id="long-menu"
-          anchorEl={anchorEl}
-          open={open}
-          onClose={this.handleClose}
-          PaperProps={{
-            style: {
-              maxHeight: ITEM_HEIGHT * 4.5,
-              width: 200
-            }
-          }}
-        >
-          <Link to="/profile">
-            <MenuItem key={ProfileContainer} onClick={this.handleClose}>
-              <Fingerprint className={classes.icon} /> Profile
-            </MenuItem>
-          </Link>
+      <ViewerContext.Consumer>
+        {({ loading, viewer }) => {
+          if (loading) return <FullScreenLoader />;
+          return (
+            <div>
+              <IconButton
+                aria-label="More"
+                aria-owns={open ? 'long-menu' : undefined}
+                aria-haspopup="true"
+                onClick={this.handleClick}
+              >
+                <MoreVert />
+              </IconButton>
+              <Menu
+                id="long-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={this.handleClose}
+                PaperProps={{
+                  style: {
+                    maxHeight: ITEM_HEIGHT * 4.5,
+                    width: 200
+                  }
+                }}
+              >
+                <Link to={`/profile/${viewer.id}`}>
+                  <MenuItem key={ProfileContainer} onClick={this.handleClose}>
+                    <Fingerprint className={classes.icon} /> Profile
+                  </MenuItem>
+                </Link>
 
-          <Mutation mutation={LOGOUT_MUTATION}>
-            {logout => (
-              <MenuItem onClick={logoutMutation}>
-                <PowerSettingsNew className={classes.icon} /> Logout
-              </MenuItem>
-            )}
-          </Mutation>
-        </Menu>
-      </div>
+                <Mutation mutation={LOGOUT_MUTATION}>
+                  {logout => (
+                    <MenuItem onClick={logoutMutation}>
+                      <PowerSettingsNew className={classes.icon} /> Logout
+                    </MenuItem>
+                  )}
+                </Mutation>
+              </Menu>
+            </div>
+          );
+        }}
+      </ViewerContext.Consumer>
     );
   }
 }

@@ -43,7 +43,6 @@ function MenuBar(props) {
               </Button>
             </Link>
           )}
-
           <Dropdown />
         </Toolbar>
       </AppBar>

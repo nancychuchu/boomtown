@@ -132,7 +132,8 @@ class ItemCard extends React.Component {
 
 ItemCard.propTypes = {
   classes: PropTypes.object.isRequired,
-  item: PropTypes.object.isRequired
+  item: PropTypes.object.isRequired,
+  borrowMutation: PropTypes.func.isRequired
 };
 
 ItemCard.defaultProps = {
